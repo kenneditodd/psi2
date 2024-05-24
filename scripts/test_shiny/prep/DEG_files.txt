@@ -1,6 +1,0 @@
-psilo.high.24h_vs_sal.24h_FDRq_1.00.tsv
-psilo.high.7d_vs_sal.7d_FDRq_1.00.tsv
-psilo.high.8h_vs_sal.8h_FDRq_1.00.tsv
-psilo.low.24h_vs_sal.24h_FDRq_1.00.tsv
-psilo.low.7d_vs_sal.7d_FDRq_1.00.tsv
-psilo.low.8h_vs_sal.8h_FDRq_1.00.tsv
