@@ -1,0 +1,8 @@
+	/research/labs/neurology/fryer/m214960/tools/miniconda3/envs/psilo/bin/STAR-avx2 --genomeDir refs/starGenomeDir --runThreadN 20 --readFilesCommand zcat --limitBAMsortRAM 31000000000 --readFilesIn trimmedReads/Psi1_A63_High_Male_L4_trim_R1.fastq.gz trimmedReads/Psi1_A63_High_Male_L4_trim_R2.fastq.gz --outFileNamePrefix starAligned/Psi1_A63_High_Male_L4. --outSAMtype BAM SortedByCoordinate
+	STAR version: 2.7.11a   compiled: 2023-09-15T02:58:53+0000 :/opt/conda/conda-bld/star_1694746407721/work/source
+May 16 13:29:49 ..... started STAR run
+May 16 13:29:49 ..... loading genome
+May 16 13:30:08 ..... started mapping
+May 16 13:37:43 ..... finished mapping
+May 16 13:37:44 ..... started sorting BAM
+May 16 13:39:16 ..... finished successfully

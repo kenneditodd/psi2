@@ -1,0 +1,16 @@
+	/research/labs/neurology/fryer/m214960/tools/miniconda3/envs/psilo/bin/STAR-avx2 --runMode genomeGenerate --runThreadN 20 --genomeFastaFiles /research/labs/neurology/fryer/projects/references/mouse/refdata-gex-mm10-2020-A/fasta/genome.fa --sjdbGTFfile /research/labs/neurology/fryer/projects/references/mouse/refdata-gex-mm10-2020-A/genes/genes.gtf --genomeDir refs/starGenomeDir/
+	STAR version: 2.7.11a   compiled: 2023-09-15T02:58:53+0000 :/opt/conda/conda-bld/star_1694746407721/work/source
+May 16 12:46:56 ..... started STAR run
+May 16 12:46:56 ... starting to generate Genome files
+May 16 12:47:38 ..... processing annotations GTF
+May 16 12:48:00 ... starting to sort Suffix Array. This may take a long time...
+May 16 12:48:11 ... sorting Suffix Array chunks and saving them to disk...
+May 16 13:04:59 ... loading chunks from disk, packing SA...
+May 16 13:06:05 ... finished generating suffix array
+May 16 13:06:05 ... generating Suffix Array index
+May 16 13:09:20 ... completed Suffix Array index
+May 16 13:09:21 ..... inserting junctions into the genome indices
+May 16 13:12:05 ... writing Genome to disk ...
+May 16 13:12:06 ... writing Suffix Array to disk ...
+May 16 13:12:16 ... writing SAindex to disk
+May 16 13:12:19 ..... finished successfully

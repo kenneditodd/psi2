@@ -1,0 +1,837 @@
+---
+title: "Psilocybin Project 1"
+subtitle: "Differential Expression"
+author: "Kennedi Todd"
+date: "05/20/2024"
+output:
+  html_document:
+    theme: cerulean
+    toc: true
+    toc_float: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+# Setup
+## Working directory
+```{r setup}
+knitr::opts_knit$set(root.dir = ".")
+```
+
+## Libraries
+```{r libraries, message=FALSE, warning=FALSE}
+library(BiocParallel)       # SnowParam()
+library(ComplexUpset)       # intersection_size()
+library(dplyr)              # left_join()
+library(edgeR)              # DGEList()
+library(limma)              # plotMDS()
+library(ggcorrplot)         # ggcorplot()
+library(ggrepel)            # geom_text_repel()
+library(ggplot2)            # ggplot()
+library(gplots)             # heatmap.2()
+library(grDevices)          # colorRampPalette()
+library(gridExtra)          # grid.arrange()
+library(Matrix)             # Matrix()
+library(parallel)           # detectCores()
+library(pheatmap)           # pheatmap()
+library(philentropy)        # JSD()
+library(rtracklayer)        # import()
+library(Seurat)             # GetAssayData()
+library(stringr)            # str_match()
+library(tidyverse)
+library(UpSetR)             # fromList()
+library(variancePartition)  # fitExtractVarPartModel()
+library(reshape)            # melt()
+```
+
+## User defined variables
+```{r set_variables}
+out <- "../../results/all_samples_strict/"
+out2 <- "all_samples_strict"
+model <- "DEGs_sex_specific/"
+treatment_order <- c("saline","psilocybin")
+treatment_colors <- c("gray60","springgreen2")
+sex_order <- c("M","F")
+sex_colors <- c("gold2","purple")
+group_order <- c("sal.8h","sal.24h","sal.7d",
+                 "psilo.low.8h","psilo.low.24h","psilo.low.7d",
+                 "psilo.high.8h","psilo.high.24h","psilo.high.7d")
+group_colors <- c("gray90","gray60","gray30","lightblue","cornflowerblue","blue",
+                          "sienna1","red2","red4")
+```
+
+## Save functions
+```{r save_functions}
+saveToPDF <- function(...) {
+    d = dev.copy(pdf,...)
+    dev.off(d)
+}
+```
+
+## Load data
+```{r}
+dge.filtered.norm <- readRDS(paste0("../../rObjects/",
+                                    out2,
+                                    "_DGEList_filtered_normalized.rds"))
+```
+
+# Voom
+## Design matrix
+```{r design_matrix}
+group <- interaction(dge.filtered.norm$samples$group2)
+sex <- factor(dge.filtered.norm$samples$sex)
+hbb <- dge.filtered.norm$samples$hbb
+
+design <- model.matrix(~ 0 + group + hbb)
+design.names <- gsub("group","", colnames(design))
+design.names <- gsub("sex", "", design.names)
+colnames(design) <- design.names
+head(design)
+```
+
+## Contrasts
+```{r}
+myContrasts2 <- c("psilo.low.8h.F - sal.8h.F",
+                 "psilo.low.24h.F - sal.24h.F",
+                 "psilo.low.7d.F - sal.7d.F",
+                 "psilo.high.8h.F - sal.8h.F",
+                 "psilo.high.24h.F - sal.24h.F",
+                 "psilo.high.7d.F - sal.7d.F",
+                 "sal.24h.F - sal.8h.F",
+                 "sal.7d.F - sal.24h.F",
+                 "sal.7d.F - sal.8h.F",
+                 "psilo.low.8h.M - sal.8h.M",
+                 "psilo.low.24h.M - sal.24h.M",
+                 "psilo.low.7d.M - sal.7d.M",
+                 "psilo.high.8h.M - sal.8h.M",
+                 "psilo.high.24h.M - sal.24h.M",
+                 "psilo.high.7d.M - sal.7d.M",
+                 "sal.24h.M - sal.8h.M",
+                 "sal.7d.M - sal.24h.M",
+                 "sal.7d.M - sal.8h.M")
+myContrasts <- c("psilo.low.8h - sal.8h",
+                 "psilo.low.24h - sal.24h",
+                 "psilo.low.7d - sal.7d",
+                 "psilo.high.8h - sal.8h",
+                 "psilo.high.24h - sal.24h",
+                 "psilo.high.7d - sal.7d",
+                 "sal.24h - sal.8h",
+                 "sal.7d - sal.24h",
+                 "sal.7d - sal.8h",
+                 "psilo.low.24h - psilo.low.8h",
+                 "psilo.low.7d - psilo.low.24h",
+                 "psilo.low.7d - psilo.low.8h",
+                 "psilo.high.24h - psilo.high.8h",
+                 "psilo.high.7d - psilo.high.24h",
+                 "psilo.high.7d - psilo.low.8h")
+```
+
+## Quality weights
+```{r voom}
+# voom transform counts
+v <- voomWithQualityWeights(dge.filtered.norm,
+                            design,
+                            plot = TRUE)
+
+# condense gene info
+genes <- v$genes
+genes <- genes %>% select(all_of(c("gene_name_unique","gene_name",
+                                   "gene_id","seqnames","start","end",
+                                   "strand","exonic_length")))
+v$genes <- genes
+
+# save
+path <- paste0(out, "postfiltering_QC/voom_gene_mean_var_weights")
+saveToPDF(paste0(path, ".pdf"), width = 6, height = 4)
+
+# fits linear model for each gene given a series of arrays
+fit <- lmFit(v, design)
+
+# contrast design for differential expression
+contrasts <- makeContrasts(
+  contrasts = myContrasts2,
+  levels = design.names)
+head(contrasts)
+
+# save contrast names
+allComparisons <- colnames(contrasts)
+allComparisons # check
+
+# run contrast analysis
+vfit <- contrasts.fit(fit, contrasts = contrasts)
+
+# Compute differential expression based on the empirical Bayes moderation of the
+# standard errors towards a common value.
+veBayesFit <- eBayes(vfit)
+plotSA(veBayesFit, main = "Final Model: Mean-variance Trend")
+
+# save
+path <- paste0(out, "postfiltering_QC/voom_gene_final_mean_var")
+saveToPDF(paste0(path, ".pdf"), width = 6, height = 4)
+```
+
+## Voom MDS Plot
+### Sex
+```{r mds_postfiltering_sex, warning=FALSE}
+# loop through dimensions and top genes
+names <- v$targets$sample_id
+dims <- list(c(1,2),c(2,3),c(3,4))
+topGenes <- c(100,500)
+
+for (dim in dims) {
+  
+  for (numGenes in topGenes) {
+      
+    mds <- plotMDS(v, 
+                   labels = names, 
+                   top = numGenes,
+                   plot = FALSE,
+                   dim.plot = dim)
+
+    toplot <- data.frame(DimX = mds$x, 
+                         DimY = mds$y,
+                         Sample = rownames(mds$distance.matrix.squared),
+                         sex = v$targets$sex)
+    
+    x.lab <- paste0(mds$axislabel," ",mds$dim.plot[1]," (",
+                    round(mds$var.explained[mds$dim.plot[1]] * 100, digits = 2),
+                    "%)")
+    y.lab <- paste0(mds$axislabel," ",mds$dim.plot[2]," (",
+                    round(mds$var.explained[mds$dim.plot[2]] * 100, digits = 2),
+                    "%)")
+    
+    p <- ggplot(toplot, aes(x = DimX, y = DimY, color = sex, label = Sample)) + 
+      geom_point(size = 3) +
+      scale_color_manual(values = sex_colors) +
+      theme_bw() +
+      geom_text(aes(label = Sample), size=4, vjust = -1) +
+      xlab(x.lab) + ylab(y.lab) + 
+      ggtitle(paste0("MDS Filtered: Top ", numGenes, ", Log2(CPM)"))
+    print(p)
+    
+    # save
+    dimTitle <- as.character(dim)
+    path <- paste0(out,"postfiltering_QC/MDS_top_",
+                   numGenes,"_genes/MDS_filtered_top_", numGenes, "_",
+                   "dim", as.character(dim)[1], "&", as.character(dim[2]), 
+                   "_colored_by_sex")
+    saveToPDF(paste0(path, ".pdf"), width = 8, height = 8)
+  }
+}
+
+remove(data)
+```
+
+### Group
+```{r mds_postfiltering_group}
+# loop through dimensions and top genes
+names <- v$targets$group
+dims <- list(c(1,2),c(2,3),c(3,4))
+topGenes <- c(100,500)
+
+for (dim in dims) {
+  
+  for (numGenes in topGenes) {
+      
+    mds <- plotMDS(v, 
+                   labels = names, 
+                   top = numGenes,
+                   plot = FALSE,
+                   dim.plot = dim)
+
+    toplot <- data.frame(DimX = mds$x, 
+                         DimY = mds$y,
+                         Sample = rownames(mds$distance.matrix.squared),
+                         group = v$targets$group)
+    
+    x.lab <- paste0(mds$axislabel," ",mds$dim.plot[1]," (",
+                    round(mds$var.explained[mds$dim.plot[1]] * 100, digits = 2),
+                    "%)")
+    y.lab <- paste0(mds$axislabel," ",mds$dim.plot[2]," (",
+                    round(mds$var.explained[mds$dim.plot[2]] * 100, digits = 2),
+                    "%)")
+    
+    p <- ggplot(toplot, aes(x = DimX, y = DimY, color = group, label = Sample)) + 
+      geom_point(size = 3) +
+      scale_color_manual(values = group_colors) +
+      theme_bw() +
+      geom_text(aes(label = Sample), size=4, vjust = -1) +
+      xlab(x.lab) + ylab(y.lab) + 
+      ggtitle(paste0("MDS Filtered: Top ", numGenes, ", Log2(CPM)"))
+    print(p)
+    
+    # save
+    dimTitle <- as.character(dim)
+    path <- paste0(out, "postfiltering_QC/MDS_top_",
+                   numGenes,"_genes/MDS_filtered_top_", numGenes, "_",
+                   "dim", as.character(dim)[1], "&", as.character(dim[2]), 
+                   "_colored_by_group")
+    saveToPDF(paste0(path, ".pdf"), width = 8, height = 8)
+  }
+}
+```
+
+### Treatment
+```{r mds_postfiltering_treatment}
+# loop through dimensions and top genes
+names <- v$targets$treatment
+dims <- list(c(1,2),c(2,3),c(3,4))
+topGenes <- c(100,500)
+
+for (dim in dims) {
+  
+  for (numGenes in topGenes) {
+      
+    mds <- plotMDS(v, 
+                   labels = names, 
+                   top = numGenes,
+                   plot = FALSE,
+                   dim.plot = dim)
+
+    toplot <- data.frame(DimX = mds$x, 
+                         DimY = mds$y,
+                         Sample = rownames(mds$distance.matrix.squared),
+                         treatment = v$targets$treatment)
+    
+    x.lab <- paste0(mds$axislabel," ",mds$dim.plot[1]," (",
+                    round(mds$var.explained[mds$dim.plot[1]] * 100, digits = 2),
+                    "%)")
+    y.lab <- paste0(mds$axislabel," ",mds$dim.plot[2]," (",
+                    round(mds$var.explained[mds$dim.plot[2]] * 100, digits = 2),
+                    "%)")
+    
+    p <- ggplot(toplot, aes(x = DimX, y = DimY, color = treatment, label = Sample)) + 
+      geom_point(size = 3) +
+      scale_color_manual(values = treatment_colors) +
+      theme_bw() +
+      geom_text(aes(label = Sample), size=4, vjust = -1) +
+      xlab(x.lab) + ylab(y.lab) + 
+      ggtitle(paste0("MDS Filtered: Top ", numGenes, ", Log2(CPM)"))
+    print(p)
+    
+    # save
+    dimTitle <- as.character(dim)
+    path <- paste0(out, "postfiltering_QC/MDS_top_",
+                   numGenes,"_genes/MDS_filtered_top_", numGenes, "_",
+                   "dim", as.character(dim)[1], "&", as.character(dim[2]), 
+                   "_colored_by_treatment")
+    saveToPDF(paste0(path, ".pdf"), width = 8, height = 8)
+  }
+}
+```
+
+# Differential Expressioin
+## Number of DEGs
+Identify number of differentially expressed genes.
+```{r decide_tests}
+pval <- 0.1
+my.lfc <- 0
+
+sumTable <- 
+  summary(decideTests(
+    veBayesFit,  # object
+    adjust.method = "BH", # by default the method = "separate"
+    p.value = pval,
+    lfc = my.lfc  # numeric, minimum absolute log2-fold change required
+  ))
+
+print(paste0(" FDRq < ", pval, ", LFC = ", my.lfc))
+sumTable
+
+write.table(sumTable, 
+            paste0(out, model, "DEG_tables/DEG_comparison_FDRq_", 
+                   format(pval, nsmall = 2), "_LFC_",
+                   format(my.lfc, nsmall = 2),
+                   ".tsv"), 
+            quote = FALSE, 
+            sep = "\t")
+
+```
+
+## DEG heatmap
+```{r}
+# reformat before plotting
+df <- as.data.frame(sumTable)
+colnames(df) <- c("direction", "comparison", "count")
+df <- df[!df$direction == "NotSig",]
+df$comparison <- gsub(" - ", " vs ", df$comparison)
+df <- df %>% pivot_wider(names_from = comparison, values_from = count)
+df <- data.frame(df)
+rownames(df) <- df$direction
+df$direction <- NULL
+df <- t(df)
+
+# set heatmap colors and names
+meta <- data.frame(category = c(rep("low dose vs saline", 3),
+                                rep("high dose vs saline", 3),
+                                rep("saline vs saline", 3),
+                                rep("low dose vs low dose", 3),
+                                rep("high dose vs high dose", 3)))
+rownames(meta) <- rownames(df)
+paletteLength <- 100
+myColor <- colorRampPalette(c("white","#f0eb9e","darkgreen"))(paletteLength)
+ann_colors = list(category = c(`low dose vs saline` = "firebrick2", 
+                                 `high dose vs saline` = "gold",
+                                 `saline vs saline` = "green3",
+                                 `low dose vs low dose` = "cornflowerblue",
+                                 `high dose vs high dose` = "gray"))
+
+# save
+path <- paste0(out, model, "/DEG_tables/DEG_comparison_FDRq_",
+               format(pval, nsmall = 2),
+               "_LFC_", format(my.lfc, nsmall = 2),".pdf")
+pdf(path, width = 8, height = 9)
+
+# plot
+pheatmap::pheatmap(df,
+                   main = paste0("FDRq < ", pval, ", |LFC| > ", my.lfc),
+                   treeheight_row = 0,
+                   treeheight_col = 0,
+                   color = myColor,
+                   cluster_rows = FALSE,
+                   annotation_row = meta,
+                   annotation_colors = ann_colors,
+                   display_numbers = round(df, digits = 0),
+                   fontsize_number = 12,
+                   number_color = "black")
+```
+
+## Output DEG tables
+```{r output_DEG_tables}
+coef <- 1
+
+for (i in allComparisons) {
+  # title 
+  title <- gsub(" ", "_", i)
+  title <- gsub("-","vs", title)
+  
+  
+  # p < 1, log2fc > 0 ----------------------------------------------------------
+  vTopTableAll <-
+    topTable(
+      veBayesFit, 
+      coef = coef,  
+      n = Inf, 
+      p.value = 1,
+      lfc = 0 
+    )
+  #output as txt file
+  path <- paste(out, model, "DEG_tables/", title, "_FDRq_1.00.tsv", sep = "") 
+  write.table(
+    vTopTableAll,
+    path,
+    sep = "\t",
+    row.names = FALSE,
+    quote = FALSE
+  )
+  
+  # p < 0.05, log2fc > 0 -------------------------------------------------------
+  vTopTable1 <-
+    topTable( 
+      veBayesFit,  
+      coef = coef,  
+      n = Inf, 
+      p.value = 0.05,
+      lfc = 0
+    )
+  path <- paste(out, model, "DEG_tables/", title, "_FDRq_0.05.tsv", sep = "") 
+  write.table(
+    vTopTable1,
+    path,
+    sep = "\t",
+    row.names = FALSE,
+    quote = FALSE
+  )
+
+  # p < 0.10, log2fc > 0 -------------------------------------------------------
+  vTopTable2 <-
+    topTable( 
+      veBayesFit,  
+      coef = coef,  
+      n = Inf, 
+      p.value = 0.1,
+      lfc = 0
+    )
+  path <- paste(out, model, "DEG_tables/", title, "_FDRq_0.10.tsv", sep = "") 
+  write.table(
+    vTopTable2,
+    path,
+    sep = "\t",
+    row.names = FALSE,
+    quote = FALSE
+  )
+  
+  # increment ------------------------------------------------------------------
+  coef <- coef + 1
+}
+```
+
+## Volcano
+```{r volcano_plot, message=FALSE, eval=FALSE}
+# set variables
+thresh <- 0.1
+my.lfc <- 0
+
+# get file list
+files <- list.files(paste0(out, model,"DEG_tables/"))
+keep <- grep("_1.00.tsv", files)
+files <- files[keep]
+files <- paste0(out, model, "DEG_tables/", files)
+
+for (i in files) {
+  
+  # read DEG file
+  data <- read.delim(i,sep = "\t")
+  
+  # assign colors
+  color_values <- vector()
+  max <- nrow(data)
+  for(row in 1:max){
+    if (data$adj.P.Val[row] < thresh){
+      if (data$logFC [row] > my.lfc){
+        color_values <- c(color_values, 1) # 1 when logFC > my.lfc and FDRq < thresh
+      } else if (data$logFC[row] < -my.lfc){
+        color_values <- c(color_values, 2) # 2 when logFC < -my.lfc and FDRq < thresh
+      } else {
+        color_values <- c(color_values, 3) # 3 when logFC between -my.lfc and +my.lfc and FDRq < thresh
+      }
+    } else {
+      color_values <- c(color_values, 3) # 3 when FDRq >= thresh
+    }
+  }
+  data$color_adjpval <- factor(color_values)
+  
+ # comparison name
+ comparison <- gsub(paste0(out, model, "DEG_tables/"), "", i)
+ comparison <- gsub("_FDRq_1.00.tsv","",comparison)
+    
+ # plot only if there are DEGs with adj.P.Val < thresh
+ num <- data[data$adj.P.Val < thresh,]
+ num <- nrow(num)
+ if(num != 0) {
+   
+    # subset genes to label
+    up <- data[data$color_adjpval == 1,]
+    up15 <- up[1:15,]
+    down <- data[data$color_adjpval == 2,]
+    down15 <- down[1:15,]
+      
+    # set manual colors
+    if (!1 %in% unique(data$color_adjpval)) {
+      my_colors <- c("blue","gray")
+    } else if (!2 %in% unique(data$color_adjpval)) {
+      my_colors <- c("red","gray")
+    } else if (!1 %in% unique(data$color_adjpval) && !2 %in% unique(data$color_adjpval)) {
+      my_colors <- c("gray")
+    } else {
+      my_colors <- c("red","blue","gray")
+    }
+      
+    # set significance threshold
+    hadjpval <- (-log10(max(data$P.Value[data$adj.P.Val < thresh], na.rm=TRUE)))
+
+    # plot
+    p <-
+      ggplot(data = data, 
+             aes(x = logFC,  # x-axis is logFC
+                 y = -log10(P.Value),  # y-axis will be -log10 of P.Value
+                 color = color_adjpval)) +  # color is based on factored color column
+      geom_point(alpha = 0.8, size = 2) +  # create scatterplot, alpha makes points transparent
+      theme_bw() +  # set color theme
+      theme(legend.position = "none") +  # no legend
+      scale_color_manual(values = my_colors) +  # set factor colors
+      labs(
+        title = "", # no main title
+        x = expression(log[2](FC)), # x-axis title
+         y = expression(-log[10] ~ "(" ~ italic("p") ~ "-value)") # y-axis title
+      ) +
+      theme(axis.title.x = element_text(size = 15),
+            axis.text.x = element_text(size = 15)) +
+      theme(axis.title.y = element_text(size = 15),
+            axis.text.y = element_text(size = 15)) +
+      theme(plot.title = element_text(size = 15)) +
+      geom_hline(yintercept = hadjpval,  #  horizontal line
+                         colour = "#000000",
+                         linetype = "dashed") +
+      geom_vline(xintercept = -my.lfc,  #  vertical line
+                         colour = "#000000",
+                         linetype = "dashed") +
+      geom_vline(xintercept = my.lfc,  #  vertical line
+                         colour = "#000000",
+                         linetype = "dashed") +
+      ggtitle(paste0(comparison, ", adj.P.Val < ", thresh, ", LFC = ", my.lfc)) +
+      geom_text_repel(data = up15,
+                      aes(x = logFC, y= -log10(P.Value), label = gene_name), 
+                      size = 5,
+                      color = "maroon", 
+                      fontface="italic",
+                      max.overlaps = getOption("ggrepel.max.overlaps", default = 30)
+                      ) +
+      geom_text_repel(data = down15,
+                      aes(x = logFC, y= -log10(P.Value), label = gene_name), 
+                      color = "navyblue", 
+                      size = 5,
+                      fontface="italic",
+                      max.overlaps = getOption("ggrepel.max.overlaps", default = 30)
+                      )
+     p
+      
+    # save
+    path <- paste0(out, model, "volcano/volcano_", comparison, "_FDRq_", 
+                   format(thresh, nsmall = 2), "_LFC_",
+                   format(my.lfc, nsmall = 2), ".pdf")
+    pdf(path, height = 8, width = 8)
+    print(p)
+    dev.off()
+  }
+} # end loop through variables
+```
+
+## Metascape input
+```{r}
+# set variables
+thresh <- 0.1
+my.lfc <- 0
+
+# get file list
+files <- list.files(paste0(out, model,"DEG_tables/"))
+keep <- grep("_1.00.tsv", files)
+files <- files[keep]
+files <- paste0(out, model, "DEG_tables/", files)
+
+# loop through files
+for (i in 1:length(files)) {
+  # read table
+  data <- read.table(files[i], header = TRUE, sep = "\t")
+  data <- data[data$adj.P.Val < thresh,]
+  up <- data[data$logFC > my.lfc,]
+  up <- up$gene_name  
+  down <- data[data$logFC < -my.lfc,]
+  down <- down$gene_name
+  
+ # comparison name
+ comparison <- gsub(paste0(out, model, "DEG_tables/"), "", files[i])
+ comparison <- gsub("_FDRq_1.00.tsv","",comparison)
+ 
+  # save
+  write.table(x = up,
+            file = paste0(out, model, "metascape_input/", comparison,
+                          "_upregulated_", format(thresh, nsmall = 2), 
+                          "_LFC_", format(my.lfc, nsmall = 2), ".tsv"),
+            quote = FALSE,
+            row.names = FALSE,
+            col.names = FALSE)
+    write.table(x = down,
+            file = paste0(out, model, "metascape_input/", comparison,
+                          "_downregulated_", format(thresh, nsmall = 2),
+                          "_LFC_", format(my.lfc, nsmall = 2), ".tsv"),
+            quote = FALSE,
+            row.names = FALSE,
+            col.names = FALSE)
+}
+```
+
+## Upset
+```{r, eval=FALSE, echo=FALSE}
+# set var
+thresh <- 0.1
+
+# paths
+prefix <- paste0(out, model, "DEG_tables/")
+suffix <- "_FDRq_1.00.tsv"
+
+# 8 hr low dose
+low.8h <- read.table(paste0(prefix, "psilo.low.8h_vs_sal.8h", suffix), 
+                     sep = "\t", header = TRUE)
+rownames(low.8h) <- low.8h$gene_name_unique
+
+# 8 hr high dose
+high.8h <- read.table(paste0(prefix, "psilo.high.8h_vs_sal.8h", suffix), 
+                      sep = "\t", header = TRUE)
+rownames(high.8h) <- high.8h$gene_name_unique
+
+# 24 hr low dose
+low.24h <- read.table(paste0(prefix, "psilo.low.24h_vs_sal.24h", suffix), 
+                      sep = "\t", header = TRUE)
+rownames(low.24h) <- low.24h$gene_name_unique
+
+# 24 hr high dose
+high.24h <- read.table(paste0(prefix, "psilo.high.24h_vs_sal.24h", suffix), sep = "\t", header = TRUE)
+rownames(high.24h) <- high.24h$gene_name_unique
+
+# 7 day low dose
+low.7d <- read.table(paste0(prefix, "psilo.low.7d_vs_sal.7d", suffix), sep = "\t", header = TRUE)
+rownames(low.7d) <- low.7d$gene_name_unique
+
+# 7 day high dose
+high.7d <- read.table(paste0(prefix, "psilo.high.7d_vs_sal.7d", suffix), sep = "\t", header = TRUE)
+rownames(high.7d) <- high.7d$gene_name_unique
+
+# filter tables
+low.8h <- low.8h[low.8h$adj.P.Val < thresh,]
+high.8h <- high.8h[high.8h$adj.P.Val < thresh,]
+low.24h <- low.24h[low.24h$adj.P.Val < thresh,]
+high.24h <- high.24h[high.24h$adj.P.Val < thresh,]
+low.7d <- low.7d[low.7d$adj.P.Val < thresh,]
+high.7d <- high.7d[high.7d$adj.P.Val < thresh,]
+
+# Subset lists
+low.8h.up <- subset(low.8h$gene_name_unique, low.8h$logFC > 0)
+low.8h.down <- subset(low.8h$gene_name_unique, low.8h$logFC < 0)
+high.8h.up <- subset(high.8h$gene_name_unique, high.8h$logFC > 0)
+high.8h.down <- subset(high.8h$gene_name_unique, high.8h$logFC < 0)
+low.24h.up <- subset(low.24h$gene_name_unique, low.24h$logFC > 0)
+low.24h.down <- subset(low.24h$gene_name_unique, low.24h$logFC < 0)
+high.24h.up <- subset(high.24h$gene_name_unique, high.24h$logFC > 0)
+high.24h.down <- subset(high.24h$gene_name_unique, high.24h$logFC < 0)
+low.7d.up <- subset(low.7d$gene_name_unique, low.7d$logFC > 0)
+low.7d.down <- subset(low.7d$gene_name_unique, low.7d$logFC < 0)
+high.7d.up <- subset(high.7d$gene_name_unique, high.7d$logFC > 0)
+high.7d.down <- subset(high.7d$gene_name_unique, high.7d$logFC < 0)
+list_input <- list("8 hr Low Dose Psilocybin vs Saline Up-regulated" = low.8h.up,
+                   "8 hr High Dose Psilocybin vs Saline Up-regulated" = high.8h.up,
+                   "24 hr Low Dose Psilocybin vs Saline Up-regulated" = low.24h.up,
+                   "24 hr High Dose Psilocybin vs Saline Up-regulated" = high.24h.up,
+                   "7 day Low Dose Psilocybin vs Saline Up-regulated" = low.7d.up,
+                   "7 day High Dose Psilocybin vs Saline Up-regulated" = high.7d.up,
+                   "8 hr Low Dose Psilocybin vs Saline Down-regulated" = low.8h.down,
+                   "8 hr High Dose Psilocybin vs Saline Down-regulated" = high.8h.down,
+                   "24 hr Low Dose Psilocybin vs Saline Down-regulated" = low.24h.down,
+                   "24 hr High Dose Psilocybin vs Saline Down-regulated" = high.24h.down,
+                   "7 day Low Dose Psilocybin vs Saline Down-regulated" = low.7d.down,
+                   "7 day High Dose Psilocybin vs Saline Down-regulated" = high.7d.down)
+data <- fromList(list_input)
+  
+# store names
+names <- colnames(data)
+  
+# plot
+upset_gene <- ComplexUpset::upset(data, 
+				  names,
+				  set_sizes=(
+					upset_set_size()
+					+ geom_text(aes(label=..count..), hjust=1.1, stat='count')
+					+ expand_limits(y=2000)),
+				  queries = list(upset_query("8 hr Low Dose Psilocybin vs Saline Up-regulated", fill = "red"),
+								 upset_query("8 hr High Dose Psilocybin vs Saline Up-regulated", fill = "red"),
+								 upset_query("24 hr Low Dose Psilocybin vs Saline Up-regulated", fill = "red"),
+								 upset_query("24 hr High Dose Psilocybin vs Saline Up-regulated", fill = "red"),
+								 upset_query("7 day Low Dose Psilocybin vs Saline Up-regulated", fill = "red"),
+								 upset_query("7 day High Dose Psilocybin vs Saline Up-regulated", fill = "red"),
+								 upset_query("8 hr Low Dose Psilocybin vs Saline Down-regulated", fill = "blue"),
+								 upset_query("8 hr High Dose Psilocybin vs Saline Down-regulated", fill = "blue"),
+								 upset_query("24 hr Low Dose Psilocybin vs Saline Down-regulated", fill = "blue"),
+								 upset_query("24 hr High Dose Psilocybin vs Saline Down-regulated", fill = "blue"),
+								 upset_query("7 day Low Dose Psilocybin vs Saline Down-regulated", fill = "blue"),
+								 upset_query("7 day High Dose Psilocybin vs Saline Down-regulated", fill = "blue")),
+				  base_annotations = list('Intersection size' = (
+					intersection_size(bar_number_threshold=1, width=0.5)
+					+ scale_y_continuous(expand=expansion(mult=c(0, 0.05)),limits = c(0,2000)) # space on top
+					+ theme(
+						  # hide grid lines
+						  panel.grid.major=element_blank(),
+						  panel.grid.minor=element_blank(),
+						  # show axis lines
+						  axis.line=element_line(colour='black')))),
+				  stripes = upset_stripes(
+					geom=geom_segment(size=12),  # make the stripes larger
+					colors=c('grey95', 'white')),
+				  # to prevent connectors from getting the colorured
+				  # use `fill` instead of `color`, together with `shape='circle filled'`
+				  matrix = intersection_matrix(
+					geom=geom_point(
+					  shape='circle filled',
+					  size=3,
+					  stroke=0.45)),
+				  sort_sets=FALSE,
+				  sort_intersections='descending'
+				)
+
+upset_gene <- upset_gene + ggtitle(paste0("adj_p_val < ", format(thresh, nsmall = 2)))
+
+# save
+pdf(paste0(out, model, "upset/upset_plot_FDRq_", format(thresh, nsmall = 2), ".pdf"), 
+    height = 6, width = 20)
+upset_gene
+```
+
+# Power analysis
+## Check power
+```{r}
+# design
+group <- interaction(dge.filtered.norm$samples$group)
+sex <- factor(dge.filtered.norm$samples$sex)
+hbb <- dge.filtered.norm$samples$hbb
+design <- model.matrix(~ 0 + group + sex + hbb)
+design.names <- gsub("group","", colnames(design))
+design.names <- gsub("sex", "", design.names)
+colnames(design) <- design.names
+head(design)
+
+# find dispersion
+dge.filtered.norm <- estimateDisp(dge.filtered.norm, design)
+myDisp <- dge.filtered.norm$common.dispersion
+myDisp
+
+# get dataframes
+counts <- as.data.frame(dge.filtered.norm$counts)
+meta <- dge.filtered.norm$samples[,c("sample_id","group")]
+
+# find avg count per group
+mean.group <- counts |>
+  mutate(gene = row.names(counts)) |>
+  pivot_longer(-gene, names_to = "sample_id") |>
+  left_join(meta, by = "sample_id") |>
+  summarize(mean = mean(value), .by = c(gene, group)) |>
+  pivot_wider(names_from = group, values_from = mean)
+mean.group <- as.data.frame(mean.group)
+rownames(mean.group) <- mean.group$gene
+mean.group$gene <- NULL
+mean.group <- round(mean.group, digits = 4)
+
+# check mean read count for control group of interest
+summary(mean.group)
+
+# set var
+maxGenes <- dim(dge.filtered.norm)[1]
+
+# check power
+check.power(nGenes = maxGenes, # total num genes
+            pi0 = 1-((1771+1938)/maxGenes), # proportion of nonsig genes
+            m = 10, # sample size
+            mu = 7334, # mean read counts in a control group
+            disp = myDisp, # dispersion for all genes
+            fc = 0.2,
+            up = 1938/(1771+1938), # proportion of DE genes that are upreg
+            fdr = 0.05)
+```
+$pow_bh_ave
+[1] 1
+
+$fdr_bh_ave
+[1] 0.03608035
+
+$pow_qvalue_ave
+[1] 1
+
+$fdr_qvalue_ave
+[1] 0.04992364
+
+## Sample size calculator
+```{r}
+ssizeRNA_single(nGenes = 13000,                # total genes
+                pi0 = 0.9,                     # proportion nonsig genes
+                m = 4,                         # pseudo sample size
+                mu = 7000,                     # pseudo mean counts in control group
+                disp = 0.1,                    # pseudo dispersion
+                fc = .2,                       # fold change
+                up = 0.5,                      # percent up-reg of DE genes
+                fdr = 0.05,                    # adjusted p value
+                power = 0.8)                   # prob you accept alternative hypothesis
+```
+
+
+
+```{r}
+sessionInfo()
+```

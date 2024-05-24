@@ -1,0 +1,73 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 10
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=12702, mem_mib=12114, disk_mb=12702, disk_mib=12114
+Select jobs to execute...
+
+[Thu May 16 14:01:30 2024]
+rule exon_count:
+    input: starAligned/Psi1_A22_NS_Male_L3.Aligned.sortedByCoord.out.bam, /research/labs/neurology/fryer/projects/references/mouse/refdata-gex-mm10-2020-A/genes/genes.gtf
+    output: featureCounts/Psi1_A22_NS_Male_L3_exon.counts
+    jobid: 0
+    reason: Forced execution
+    wildcards: sample=Psi1_A22_NS_Male_L3
+    resources: mem_mb=12702, mem_mib=12114, disk_mb=12702, disk_mib=12114, tmpdir=/tmp
+
+
+        ==========     _____ _    _ ____  _____  ______          _____  
+        =====         / ____| |  | |  _ \|  __ \|  ____|   /\   |  __ \ 
+          =====      | (___ | |  | | |_) | |__) | |__     /  \  | |  | |
+            ====      \___ \| |  | |  _ <|  _  /|  __|   / /\ \ | |  | |
+              ====    ____) | |__| | |_) | | \ \| |____ / ____ \| |__| |
+        ==========   |_____/ \____/|____/|_|  \_\______/_/    \_\_____/
+	  v2.0.6
+
+//========================== featureCounts setting ===========================\\
+||                                                                            ||
+||             Input files : 1 BAM file                                       ||
+||                                                                            ||
+||                           Psi1_A22_NS_Male_L3.Aligned.sortedByCoord.out.bam ||
+||                                                                            ||
+||             Output file : Psi1_A22_NS_Male_L3_exon.counts                  ||
+||                 Summary : Psi1_A22_NS_Male_L3_exon.counts.summary          ||
+||              Paired-end : yes                                              ||
+||        Count read pairs : no                                               ||
+||              Annotation : genes.gtf (GTF)                                  ||
+||      Dir for temp files : featureCounts                                    ||
+||                                                                            ||
+||                 Threads : 20                                               ||
+||                   Level : meta-feature level                               ||
+||      Multimapping reads : not counted                                      ||
+||     Multiple alignments : primary alignment only                           ||
+|| Multi-overlapping reads : not counted                                      ||
+||   Min overlapping bases : 1                                                ||
+||                                                                            ||
+\\============================================================================//
+
+//================================= Running ==================================\\
+||                                                                            ||
+|| Load annotation file genes.gtf ...                                         ||
+||    Features : 805200                                                       ||
+||    Meta-features : 32285                                                   ||
+||    Chromosomes/contigs : 41                                                ||
+||                                                                            ||
+|| Process BAM file Psi1_A22_NS_Male_L3.Aligned.sortedByCoord.out.bam...      ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 134239652                                            ||
+||    Successfully assigned alignments : 105120781 (78.3%)                    ||
+||    Running time : 0.33 minutes                                             ||
+||                                                                            ||
+|| Write the final count table.                                               ||
+|| Write the read assignment summary.                                         ||
+||                                                                            ||
+|| Summary of counting results can be found in file "featureCounts/Psi1_A22_  ||
+|| NS_Male_L3_exon.counts.summary"                                            ||
+||                                                                            ||
+\\============================================================================//
+
+[Thu May 16 14:01:54 2024]
+Finished job 0.
+1 of 1 steps (100%) done

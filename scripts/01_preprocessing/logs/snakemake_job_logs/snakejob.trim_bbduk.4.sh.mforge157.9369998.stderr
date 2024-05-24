@@ -1,0 +1,46 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 10
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=12017, mem_mib=11461, disk_mb=12017, disk_mib=11461
+Select jobs to execute...
+
+[Thu May 16 13:07:25 2024]
+rule trim_bbduk:
+    input: rawReads/Psi1_A12_Low_Male_L3_R1.fastq.gz, rawReads/Psi1_A12_Low_Male_L3_R2.fastq.gz
+    output: trimmedReads/Psi1_A12_Low_Male_L3_trim_R1.fastq.gz, trimmedReads/Psi1_A12_Low_Male_L3_trim_R2.fastq.gz
+    jobid: 0
+    reason: Forced execution
+    wildcards: sample=Psi1_A12_Low_Male_L3
+    resources: mem_mb=12017, mem_mib=11461, disk_mb=12017, disk_mib=11461, tmpdir=/tmp
+
+java -ea -Xmx3g -Xms3g -cp /research/labs/neurology/fryer/m214960/tools/miniconda3/envs/psilo/opt/bbmap-39.01-1/current/ jgi.BBDuk -Xmx3g in1=rawReads/Psi1_A12_Low_Male_L3_R1.fastq.gz in2=rawReads/Psi1_A12_Low_Male_L3_R2.fastq.gz out1=trimmedReads/Psi1_A12_Low_Male_L3_trim_R1.fastq.gz out2=trimmedReads/Psi1_A12_Low_Male_L3_trim_R2.fastq.gz ref=refs/adapters.fa ktrim=r k=23 mink=11 hdist=1 tpe tbo threads=20 trimpolyg=1 trimpolya=1
+Executing jgi.BBDuk [-Xmx3g, in1=rawReads/Psi1_A12_Low_Male_L3_R1.fastq.gz, in2=rawReads/Psi1_A12_Low_Male_L3_R2.fastq.gz, out1=trimmedReads/Psi1_A12_Low_Male_L3_trim_R1.fastq.gz, out2=trimmedReads/Psi1_A12_Low_Male_L3_trim_R2.fastq.gz, ref=refs/adapters.fa, ktrim=r, k=23, mink=11, hdist=1, tpe, tbo, threads=20, trimpolyg=1, trimpolya=1]
+Version 39.01
+
+Set threads to 20
+maskMiddle was disabled because useShortKmers=true
+0.017 seconds.
+Initial:
+Memory: max=3221m, total=3221m, free=3193m, used=28m
+
+Added 3614 kmers; time: 	0.038 seconds.
+Memory: max=3221m, total=3221m, free=3185m, used=36m
+
+Input is being processed as paired
+Started output streams:	0.240 seconds.
+Processing time:   		203.278 seconds.
+
+Input:                  	110335058 reads 		11143840858 bases.
+Polymer-trimmed:        	161216985 reads (146.12%) 	297630380 bases (2.67%)
+KTrimmed:               	3510106 reads (3.18%) 	115987580 bases (1.04%)
+Trimmed by overlap:     	2872254 reads (2.60%) 	15112114 bases (0.14%)
+Total Removed:          	539540 reads (0.49%) 	428730074 bases (3.85%)
+Result:                 	109795518 reads (99.51%) 	10715110784 bases (96.15%)
+
+Time:                         	203.558 seconds.
+Reads Processed:        110m 	542.03k reads/sec
+Bases Processed:      11143m 	54.75m bases/sec
+[Thu May 16 13:10:49 2024]
+Finished job 0.
+1 of 1 steps (100%) done

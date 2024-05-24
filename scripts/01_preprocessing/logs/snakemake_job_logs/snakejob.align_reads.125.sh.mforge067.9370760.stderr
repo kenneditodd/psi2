@@ -1,0 +1,19 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 10
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=12367, mem_mib=11795, disk_mb=12367, disk_mib=11795
+Select jobs to execute...
+
+[Thu May 16 13:41:29 2024]
+rule align_reads:
+    input: trimmedReads/Psi1_A25_NS_Male_L3_trim_R1.fastq.gz, trimmedReads/Psi1_A25_NS_Male_L3_trim_R2.fastq.gz, refs/starGenomeDir
+    output: starAligned/Psi1_A25_NS_Male_L3.Aligned.sortedByCoord.out.bam
+    jobid: 0
+    reason: Forced execution
+    wildcards: sample=Psi1_A25_NS_Male_L3
+    resources: mem_mb=12367, mem_mib=11795, disk_mb=12367, disk_mib=11795, tmpdir=/tmp
+
+[Thu May 16 13:50:40 2024]
+Finished job 0.
+1 of 1 steps (100%) done
