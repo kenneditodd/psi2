@@ -16,14 +16,14 @@ conda activate salmon
 salmon -v
 
 # go to raw reads dir
-cd /research/labs/neurology/fryer/projects/psilocybin/psi2
+cd ../../rawReads
 
 # validate mappings
 # note this same sample has other lanes but this should be sufficient to check
 salmon quant --libType A \
              --index /research/labs/neurology/fryer/projects/references/mouse/salmonIndexGRCm39 \
-             --mates1  \
-             --mates2  \
+             --mates1 Psil2_A100_NS_Male_L006_R1_001.fastq.gz \
+             --mates2 Psil2_A100_NS_Male_L006_R2_001.fastq.gz \
              --output ../refs/transcript_quant \
              --threads 15 \
              --validateMappings

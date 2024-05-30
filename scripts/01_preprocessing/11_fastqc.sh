@@ -18,7 +18,7 @@ conda activate psilo
 cd ../../rawReads
 
 # run raw fastqc
-fastqc --threads 30 --outdir ../rawQC *.fastq.gz
+#fastqc --threads 30 --outdir ../rawQC *.fastq.gz
 
 # change directory to trimmed reads
 cd ../trimmedReads

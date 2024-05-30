@@ -12,7 +12,7 @@ with open('../../refs/sample_file_list.txt', 'r') as infile:
     for line in infile:
         numSamples += 1
         sample = line.strip()
-        allSamples.append(sample.replace("_R1.fastq.gz", ""))
+        allSamples.append(sample.replace("_R1_001.fastq.gz", ""))
 
 # create header and write to outfile
 header = '''{{
@@ -28,6 +28,7 @@ header = '''{{
     "FILES",
     "Mmusculus.gtf" : "/research/labs/neurology/fryer/projects/references/mouse/refdata-gex-mm10-2020-A/genes/genes.gtf",
     "Mmusculus.fa" : "/research/labs/neurology/fryer/projects/references/mouse/refdata-gex-mm10-2020-A/fasta/genome.fa",
+    "adapters.fa" : "/research/labs/neurology/fryer/projects/references/adapters.fa",
 
     "SAMPLE INFORMATION",
     "allSamples": {0},
@@ -46,9 +47,9 @@ with open('../../refs/sample_file_list.txt', 'r') as infile:
 
         # store filename
         sample = line.strip()
-        read1 = sample.replace(".fastq.gz", "")
-        read2 = sample.replace("_R1.fastq.gz", "_R2")
-        baseName = sample.replace("_R1.fastq.gz", "")
+        read1 = sample.replace(".fastq.gz","")
+        read2 = sample.replace("_R1_001.fastq.gz", "_R2_001")
+        baseName = sample.replace("_R1_001.fastq.gz", "")
 
         # break down fastq file info
         # @A00127:312:HVNLJDSXY:2:1101:2211:1000

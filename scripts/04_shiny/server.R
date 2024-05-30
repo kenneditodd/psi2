@@ -1,12 +1,13 @@
 # load input options
 comparisons <- readr::read_tsv("input_options.tsv")
-cpm <- read.delim2(file = "counts/CPM_prefiltering.tsv")
+cpm <- read.delim2(file = "counts/CPM_postfiltering.tsv")
 group1_options <- comparisons$group1
-group_order <- c("sal.8h","sal.24h","sal.7d",
-                 "psilo.low.8h","psilo.low.24h","psilo.low.7d",
-                 "psilo.high.8h","psilo.high.24h","psilo.high.7d")
-group_colors <- c("gray90","gray60","gray30","lightblue","cornflowerblue","blue",
-                          "sienna1","red2","red4")
+group_order <- c("S.8h","K.8h","L.8h","H.8h","KL.8h","KH.8h",
+                 "S.24h","K.24h","L.24h","H.24h","KL.24h","KH.24h",
+                 "S.7d","K.7d","L.7d","H.7d","KL.7d","KH.7d")
+group_colors <- c("#E9E9E9","#FFD0D0","#F7FCB9","#9DF097","#B5DAFF","#CE9FF7",
+                  "#9A9A9A","#FA8A8A","#EFF964","#59C751","#60ABF6","#9D54DE",
+                  "#545252","#F64646","#CEDC04","#219218","#086CD0","#6612B0")
 
 # function to plot boxplot
 plotBoxplot <- function(counts, gene) {
@@ -74,7 +75,8 @@ server <- function(input, output) {
     
     updateSelectInput(
       inputId = "group2", 
-      choices = group2_options
+      choices = group2_options,
+      selected = "S.8h"
     )
   })
   
@@ -85,7 +87,7 @@ server <- function(input, output) {
     lfc <- input$lfc
     
     # read file
-    path <- paste0("DEGs/",input$group1,"_vs_",input$group2,"_FDRq_1.00.tsv")
+    path <- paste0("DEGs/",input$group1,"_vs_",input$group2,"_FDRq_1.00_LFC_0.00.tsv")
     data <- readr::read_tsv(file = path)
     
     # assign colors
@@ -110,7 +112,7 @@ server <- function(input, output) {
     data$color_adjpval <- factor(color_values)
     
     # plot title
-    plot_title <- paste0(input$group1, " vs. ", input$group2, ", FDRq < ", fdrq, ", Log2(FC) = ", lfc)
+    plot_title <- paste0(input$group1, " vs. ", input$group2, ", FDRq < ", fdrq, ", |LFC| > ", lfc)
     
     # subset genes to label
     up <- data[data$color_adjpval == 1,]

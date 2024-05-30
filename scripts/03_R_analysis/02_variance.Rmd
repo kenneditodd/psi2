@@ -1,8 +1,8 @@
 ---
-title: "Psilocybin Project 1"
+title: "Psilocybin Project 2"
 subtitle: "Variance"
 author: "Kennedi Todd"
-date: "05/20/2023"
+date: "05/27/2024"
 output:
   html_document:
     theme: cerulean
@@ -34,15 +34,14 @@ library(variancePartition) # fitExtractVarPartModel()
 ```{r set_variables}
 out <- "../../results/all_samples_strict/"
 out2 <- "all_samples_strict"
-treatment_order <- c("saline","psilocybin")
-treatment_colors <- c("gray60","springgreen2")
-sex_order <- c("M","F")
+sex_order <- c("Male","Female")
 sex_colors <- c("gold2","purple")
-group_order <- c("sal.8h","sal.24h","sal.7d",
-                 "psilo.low.8h","psilo.low.24h","psilo.low.7d",
-                 "psilo.high.8h","psilo.high.24h","psilo.high.7d")
-group_colors <- c("gray90","gray60","gray30","lightblue","cornflowerblue","blue",
-                          "sienna1","red2","red4")
+group_order <- c("S.8h","K.8h","L.8h","H.8h","KL.8h","KH.8h",
+                 "S.24h","K.24h","L.24h","H.24h","KL.24h","KH.24h",
+                 "S.7d","K.7d","L.7d","H.7d","KL.7d","KH.7d")
+group_colors <- c("#E9E9E9","#FFD0D0","#F7FCB9","#9DF097","#B5DAFF","#CE9FF7",
+                  "#9A9A9A","#FA8A8A","#EFF964","#59C751","#60ABF6","#9D54DE",
+                  "#545252","#F64646","#CEDC04","#219218","#086CD0","#6612B0")
 ```
 
 ## Load data
@@ -60,16 +59,12 @@ meta <- as.data.frame(dge.filtered.norm$samples)
 
 # select variables of interest
 variables <- c("group",
-               "group2",
                "treatment",
                "dose",
                "timepoint",
                "lib.size",
                "sex",
-               "weight_at_treatment",
-               "RIN",
-               "lane",
-               "RNA_extraction_batch")
+               "run_flowcell_lane")
 meta <- meta %>% select(all_of(variables))
 
 # log2 transform lib.size
@@ -78,9 +73,9 @@ meta$lib.size <- NULL
 
 # change class
 meta$dose <- factor(meta$dose)
-meta$weight_at_treatment <- as.numeric(gsub(" grams","",meta$weight_at_treatment))
 meta$timepoint <- factor(meta$timepoint)
-meta$lane <- factor(meta$lane)
+meta$run_flowcell_lane <- factor(meta$run_flowcell_lane)
+meta$treatment <- factor(meta$treatment)
 
 # check classes
 sapply(meta, class)
@@ -122,12 +117,22 @@ meta <- cbind(meta, cpm)
 
 ## Significance
 ```{r stats}
-# initialize data frame
-variable_numbers <- c(7,8,11:20)
+# Set comparison values
+x <- "S.7d"
+y <- "KL.7d"
+
+# preview variables - only want numerical values
+colnames(meta)
+
+# initialize table
+variable_numbers <- c(7:17)
 variable_names <- colnames(meta)[variable_numbers]
-tests <- c("saline_mean","psilocybin_mean","saline_stdv","psilocybin_stdv",
-           "saline_shapiro_pval","psilocybin_shapiro_pval","levene_na_omit",
-           "t_test_t","t_test_pval","wilcoxon_pval")
+tests <- c("control_mean","treatment_mean",
+           "control_stdv","treatment_stdv",
+           "control_shapiro_pval","treatment_shapiro_pval",
+           "levene_na_omit",
+           "t_test_t","t_test_pval",
+           "wilcoxon_pval")
 stats <- matrix(0,
                 nrow = length(variable_numbers),
                 ncol = length(tests),
@@ -137,47 +142,47 @@ stats <- as.data.frame(stats)
 # Loop through variables
 for (i in 1:length(variable_names)) {
   
-  # Subset values by treatment
+  # Subset values by group
   values <- as.numeric(meta[, variable_names[i]])
-  treatment <- factor(meta$treatment)
-  saline_values <- meta[meta$treatment == "saline", variable_names[i]]
-  psilocybin_values <- meta[meta$treatment == "psilocybin", variable_names[i]]
+  group <- factor(meta$group)
+  control_values <- meta[meta$group == x, variable_names[i]]
+  treatment_values <- meta[meta$group == y, variable_names[i]]
   
   # Welch two sample t-test
-  t_test <- t.test(saline_values, psilocybin_values)
+  t_test <- t.test(control_values, treatment_values)
   t_test_t <- t_test$statistic
   t_test_pval <- t_test$p.value
   
   # Add to table
-  stats[i, "saline_mean"] <- round(as.numeric(t_test$estimate[1]),4)
-  stats[i, "psilocybin_mean"] <- round(as.numeric(t_test$estimate[2]),4)
+  stats[i, "control_mean"] <- round(as.numeric(t_test$estimate[1]),4)
+  stats[i, "treatment_mean"] <- round(as.numeric(t_test$estimate[2]),4)
   stats[i, "t_test_t"] <- round(t_test_t,4)
   stats[i, "t_test_pval"] <- round(t_test_pval,4)
   
   # Shapiro-Wilk test, normality test
-  saline_shapiro <- shapiro.test(saline_values)
-  psilocybin_shapiro <- shapiro.test(psilocybin_values)
+  control_shapiro <- shapiro.test(control_values)
+  treatment_shapiro <- shapiro.test(treatment_values)
   
   # Add to table
-  stats[i, "saline_shapiro_pval"] <- round(saline_shapiro$p.value,4)
-  stats[i, "psilocybin_shapiro_pval"] <- round(psilocybin_shapiro$p.value,4)
+  stats[i, "control_shapiro_pval"] <- round(control_shapiro$p.value,4)
+  stats[i, "treatment_shapiro_pval"] <- round(treatment_shapiro$p.value,4)
   
   # Variance and standard deviation
-  saline_var <- var(saline_values)
-  psilocybin_var <- var(psilocybin_values)
+  control_var <- var(control_values)
+  treatment_var <- var(treatment_values)
   
   # Add to table 
-  stats[i, "saline_stdv"] <- round(sqrt(saline_var),4)
-  stats[i, "psilocybin_stdv"] <- round(sqrt(psilocybin_var),4)
+  stats[i, "control_stdv"] <- round(sqrt(control_var),4)
+  stats[i, "treatment_stdv"] <- round(sqrt(treatment_var),4)
   
   # Two-sample Wilcoxon / Mann-Whitney
-  wil <- wilcox.test(saline_values, psilocybin_values)
+  wil <- wilcox.test(control_values, treatment_values)
   
   # Add to table
   stats[i, "wilcoxon_pval"] <- round(wil$p.value, 4)
   
   # Levene's test
-  levTest <- car::leveneTest(values ~ treatment)
+  levTest <- car::leveneTest(values ~ group)
   lev <- levTest$`Pr(>F)`
   lev_naomit <- as.numeric(na.omit(lev))
   
@@ -185,13 +190,17 @@ for (i in 1:length(variable_names)) {
   stats[i, "levene_na_omit"] <- round(lev_naomit, 4)
 }
 
+new.names <- gsub("control", x, colnames(stats))
+new.names <- gsub("treatment", y, new.names)
+colnames(stats) <- new.names
+
 write.table(x = stats,
-            file = paste0(out, "variance/stats.tsv"),
+            file = paste0(out, "variance/stats_", x, "_vs_", y, ".tsv"),
             quote = FALSE,
             sep = "\t")
 
-remove(saline_shapiro,psilocybin_shapiro,
-       t_test, wil, levTest,cpm)
+remove(control_shapiro,treatment_shapiro,
+       t_test, wil, levTest)
 ```
 
 # Correlation
@@ -200,11 +209,10 @@ remove(saline_shapiro,psilocybin_shapiro,
 ```{r spearman_heatmap}
 # save
 path <- paste0(out, "variance/spearman_correlation_heatmap.pdf")
-pdf(path, width = 8, height = 8)
+pdf(path, width = 10, height = 10)
 
 # formula
-form <- ~0 + treatment + dose + timepoint +  sex + log2.lib +
-  weight_at_treatment + RIN + RNA_extraction_batch
+form <- ~0 + group +  sex + log2.lib + run_flowcell_lane
 
 # correlation plot
 model.matrix(form, data = meta) %>% 
@@ -219,8 +227,7 @@ path <- paste0(out, "variance/canonical_correlation_analysis_heatmap.pdf")
 pdf(path, width = 8, height = 8)
 
 # formula
-form <- ~0 + treatment + dose + timepoint +  sex + log2.lib +
-  weight_at_treatment + RIN + RNA_extraction_batch
+form <- ~0 + group +  sex + log2.lib + run_flowcell_lane
 
 c <- canCorPairs(form, meta)
 
@@ -246,7 +253,7 @@ colnames(meta)
 
 # age is usually a continuous so model it as a fixed effect "age"
 # group is categorical, so model them as random effects "(1|group)"
-form <- ~ (1|dose) + (1|timepoint) + (1|sex) + log2.lib + RIN
+form <- ~ (1|group) + (1|sex) + log2.lib
 
 varPart <- fitExtractVarPartModel(geneExpr, form, meta)
 vp <- sortCols(varPart)

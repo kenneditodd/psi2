@@ -16,7 +16,7 @@ gprofilerInputFiles <- readRDS("gprofilerInputFiles.rds")
 ui <- fluidPage(
   
   # application title
-  titlePanel("Psilocybin Project 1 Bulk RNA-Sequencing"),
+  titlePanel("Psilocybin Project 2 Bulk RNA-Sequencing"),
   
   tabsetPanel(
     
@@ -29,7 +29,7 @@ ui <- fluidPage(
           selectInput(inputId = "group1",
                       label = "Select group 1",
                       choices = group1_options,
-                      selected = "psilo.low.7d"),
+                      selected = "L.8h"),
           selectInput(inputId = "group2",
                       label = "Select group 2",
                       choices = c(),
@@ -42,15 +42,15 @@ ui <- fluidPage(
                        step = 0.01),
           numericInput(inputId = "lfc",
                        label = "Select log2(FC) cutoff",
-                       value = 0,
+                       value = 0.2,
                        step = 0.1)
         ),
         
         # plot
         mainPanel(
           h5("Samples: all samples"),
-          h5("Filtering: strict, all samples in one treatment (sal or psi) must have CPM >= 1"),
-          h5("Model: group + sex + Hbb-bs"),
+          h5("Filtering: all samples in one group (i.e. L.8h) must have CPM >= 1"),
+          h5("Model: group + sex"),
           plotlyOutput("volcano")
         )
         
@@ -67,7 +67,7 @@ ui <- fluidPage(
           selectizeInput(inputId = "goi",
                          label = "Select a gene",
                          choices = genes,
-                         selected = "Hbb-bs",
+                         selected = "Snap25",
                          options = list(maxOptions = 5))
         ), # end sidebarPanel
         
@@ -95,8 +95,10 @@ ui <- fluidPage(
           h3("Gprofiler2"),
           p("Gprofiler2 performs a functional enrichment analysis on an input gene list. 
             It maps genes to known functional information sources and detects statistically significantly enriched terms. 
-            In addition to Gene Ontology, pathways from KEGG Reactome and WikiPathways are included; miRNA targets from miRTarBase and regulatory motif matches from TRANSFAC; tissue specificity from Human Protein Atlas; protein complexes from CORUM and human disease phenotypes from Human Phenotype Ontology.
-            GO hierarchy: MF = molecular function, BP = biological process, CC = cellular component"),
+            In addition to Gene Ontology, pathways from KEGG Reactome and WikiPathways are included; miRNA targets from 
+            miRTarBase and regulatory motif matches from TRANSFAC; tissue specificity from Human Protein Atlas; protein complexes from CORUM and human disease phenotypes from Human Phenotype Ontology."),
+          br(),
+          p("GO hierarchy: MF = molecular function, BP = biological process, CC = cellular component"),
           br(),
           p("May take a minute to load. Some gene lists contain too few genes to 
             return significant results. One unique feature of Gprofiler2 over 
@@ -110,7 +112,6 @@ ui <- fluidPage(
             databases. The y-axis shows the adjusted p-value from the functional 
             enrichment analysis query."),
           br(),
-          p("Using FDRq < 0.1 and |LFC| > 0.2"),
           plotlyOutput("manhattan")
         )
       ) # sidebarPanel

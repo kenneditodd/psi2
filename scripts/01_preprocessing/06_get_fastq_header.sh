@@ -3,7 +3,7 @@
 # Redirect output to save.
 
 # go to fastq dir
-cd /research/labs/neurology/fryer/projects/psilocybin/psi2
+cd ../../rawReads
 
 # set variables
 files=/research/labs/neurology/fryer/m214960/psi2/refs/fastq_file_list.txt

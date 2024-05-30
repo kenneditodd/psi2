@@ -1,8 +1,8 @@
 ---
-title: "Psilocybin Project 1"
+title: "Psilocybin Project 2"
 subtitle: "Filtering and Normalization"
 author: "Kennedi Todd"
-date: "05/20/2024"
+date: "05/27/2024"
 output:
   html_document:
     theme: cerulean
@@ -13,10 +13,11 @@ editor_options:
 ---
 
 # Background
-- bulk RNA sequencing of prefrontal cortex of 90 mice \
-- 10 samples per group (treatment, dose, time point) \
-- high dose = 1 mg/kg, low dose = 0.25 mg/kg
-- within each group there are 5 females and 5 males \
+- bulk RNA sequencing of hemibrain (olfactory bulb and cerebellum removed) of 216 mice \
+- 12 samples per group (treatment, dose, time point) \
+- within each group there 6 male and 6 female mice \
+- one mouse died and one sample had a bad extraction so there's only data on 214 mice \
+- high dose psilocybin = 1 mg/kg, low dose psilocybin = 0.25 mg/kg, ketanserin = 2 mg/kg \
 
 # Setup
 ## Working directory
@@ -46,15 +47,14 @@ library(tidyverse)          # pivot_wider()
 ```{r set_variables}
 out <- "../../results/all_samples_strict/"
 out2 <- "all_samples_strict"
-treatment_order <- c("saline","psilocybin")
-treatment_colors <- c("gray60","springgreen2")
-sex_order <- c("M","F")
+sex_order <- c("Male","Female")
 sex_colors <- c("gold2","purple")
-group_order <- c("sal.8h","sal.24h","sal.7d",
-                 "psilo.low.8h","psilo.low.24h","psilo.low.7d",
-                 "psilo.high.8h","psilo.high.24h","psilo.high.7d")
-group_colors <- c("gray90","gray60","gray30","lightblue","cornflowerblue","blue",
-                          "sienna1","red2","red4")
+group_order <- c("S.8h","K.8h","L.8h","H.8h","KL.8h","KH.8h",
+                 "S.24h","K.24h","L.24h","H.24h","KL.24h","KH.24h",
+                 "S.7d","K.7d","L.7d","H.7d","KL.7d","KH.7d")
+group_colors <- c("#E9E9E9","#FFD0D0","#F7FCB9","#9DF097","#B5DAFF","#CE9FF7",
+                  "#9A9A9A","#FA8A8A","#EFF964","#59C751","#60ABF6","#9D54DE",
+                  "#545252","#F64646","#CEDC04","#219218","#086CD0","#6612B0")
 ann <- paste0("/research/labs/neurology/fryer/projects/references/",
               "mouse/refdata-gex-mm10-2020-A/genes/genes.gtf")
 ```
@@ -83,13 +83,11 @@ meta <- read.delim("../../refs/metadata.tsv",
                    header = TRUE,
                    sep = "\t")
 meta$group <- factor(meta$group, levels = group_order)
-meta <- meta %>% ungroup() %>% arrange(group)
-rownames(meta) <- meta$filename
-meta$group2 <- factor(paste0(meta$group, ".", meta$sex))
+meta <- meta %>% ungroup() %>% arrange(group, animal_id)
+rownames(meta) <- 1:nrow(meta)
 
 # rename counts columns
-counts.names <- gsub("_L4", "", colnames(counts))
-counts.names <- gsub("_L3", "", counts.names)
+counts.names <- gsub("_L00[1-9]", "", colnames(counts))
 colnames(counts) <- counts.names
 
 # make count cols match meta rows
@@ -97,8 +95,8 @@ counts <- counts[,meta$filename]
 all.equal(colnames(counts), meta$filename)
 
 # set row and col names to sample_id
-rownames(meta) <- meta$sample_id
-colnames(counts) <- meta$sample_id
+rownames(meta) <- meta$sample_name
+colnames(counts) <- meta$sample_name
 
 # read in annotation file
 if (file.exists("../../rObjects/annotation.rds")) {
@@ -138,9 +136,7 @@ dge <- DGEList(counts = counts,
 remove(counts, meta, genes)
 
 # set levels
-dge$samples$treatment <- factor(dge$samples$treatment, levels = treatment_order)
 dge$samples$sex <- factor(dge$samples$sex, levels = sex_order)
-dge$samples$lane <- factor(dge$samples$lane)
 ```
 
 ## Remove MT genes
@@ -158,21 +154,6 @@ keep <- dge$genes$gene_type == "protein_coding"
 dge <- dge[keep,,keep.lib.sizes = FALSE]
 dim(dge)
 ```
-
-## Remove high Hbb-bs samples
-```{r remove_high_hemoglobin}
-# Add Hbb-bs to metadata
-hbb <- as.data.frame(cpm(dge, log = TRUE))["Hbb-bs",]
-dge$samples$hbb <- as.numeric(hbb)
-
-#hbb.cpm <- cpm(dge$counts)["Hbb-bs",]
-#keep <- !hbb.cpm > 10
-#dge <- dge[,keep]
-#dim(dge)
-
-remove(hbb)
-```
-
 
 # QC: Raw
 ## Bargraph
@@ -202,7 +183,7 @@ for (i in 1:length(goi)) {
   
   # save
   path <- paste0(out,"prefiltering_QC/", goi[i], "_bar_graph_raw")
-  saveToPDF(paste0(path, ".pdf"), width = 12, height = 4)
+  saveToPDF(paste0(path, ".pdf"), width = 25, height = 6)
   dev.off()
 }
 remove(df,p)
@@ -214,7 +195,7 @@ The pdf and png file can only be saved one at a time.
 ```{r JSD_heatmap}
 # find JSD
 data <- JSD(t(cpm(dge$counts)), est.prob = "empirical")
-names <- dge$samples$sample_id
+names <- dge$samples$sample_name
 colnames(data) <- names
 rownames(data) <- names
 round.data <- round(data, digits = 4) # round 2 decimal places
@@ -228,8 +209,11 @@ meta <- dge$samples[,c("treatment","sex")]
 rownames(meta) <- names
 paletteLength <- 100
 myColor <- colorRampPalette(c("blue", "skyblue", "white"))(paletteLength)
-ann_colors = list(treatment = c(saline="lightgray", psilocybin="springgreen2"),
-                  sex = c(M="gold", F="purple"))
+ann_colors = list(treatment = c(Saline="lightgray", 
+                                Ketanserin="cornflowerblue",
+                                Psilocybin="springgreen2",
+                                `Ketanserin+Psilocybin`="tomato"),
+                  sex = c(Male="gold", Female="purple"))
 
 pheatmap::pheatmap(round.data,
                    treeheight_row = 0,
@@ -237,10 +221,7 @@ pheatmap::pheatmap(round.data,
                    annotation_row = meta,
                    annotation_col = meta,
                    annotation_colors = ann_colors,
-                   color = myColor,
-                   #display_numbers = TRUE,
-                   #fontsize_number = 6,
-                   number_color = "black")
+                   color = myColor)
 ```
 
 ## MDS
@@ -254,7 +235,7 @@ pheatmap::pheatmap(round.data,
 ```{r MDS_colored_by_sex}
 # set colors and get data
 data <- cpm(dge$counts, log = TRUE)
-names <- dge$samples$sample_id
+names <- dge$samples$sample_name
 
 # loop through dimensions and top genes
 dims <- list(c(1,2),c(2,3),c(3,4))
@@ -304,12 +285,11 @@ for (dim in dims) {
 remove(data)
 ```
 
-
 ### Group
-```{r}
+```{r MDS_colored_by_group}
 # set colors and get data
 data <- cpm(dge$counts, log = TRUE)
-names <- dge$samples$informative_name
+names <- dge$samples$sample_name
 
 # loop through dimensions and top genes
 dims <- list(c(1,2),c(2,3),c(3,4))
@@ -360,10 +340,10 @@ remove(data)
 ```
 
 ### Treatment
-```{r MDS_colored_by_sex}
+```{r MDS_colored_by_treatment}
 # set colors and get data
 data <- cpm(dge$counts, log = TRUE)
-names <- dge$samples$sample_id
+names <- dge$samples$sample_name
 
 # loop through dimensions and top genes
 dims <- list(c(1,2),c(2,3),c(3,4))
@@ -393,7 +373,7 @@ for (dim in dims) {
     
     p <- ggplot(toplot, aes(x = DimX, y = DimY, color = treatment, label = Sample)) + 
       geom_point(size = 3) +
-      scale_color_manual(values = treatment_colors) +
+      #scale_color_manual(values = treatment_colors) +
       theme_bw() +
       geom_text(aes(label = Sample), size=4, vjust = -1) +
       xlab(x.lab) + ylab(y.lab) + 
@@ -406,64 +386,6 @@ for (dim in dims) {
                    numGenes,"_genes/MDS_raw_top_", numGenes, "_",
                    "dim", as.character(dim)[1], "&", as.character(dim[2]), 
                    "_colored_by_treatment")
-    saveToPDF(paste0(path, ".pdf"), width = 8, height = 8)
-  }
-}
-
-remove(data)
-```
-
-### RNA extraction
-```{r MDS_colored_by_sex}
-# set colors and get data
-dge$samples$RNA_extraction_batch <- factor(dge$samples$RNA_extraction_batch)
-data <- cpm(dge$counts, log = TRUE)
-names <- dge$samples$sample_id
-
-# loop through dimensions and top genes
-dims <- list(c(1,2),c(2,3),c(3,4))
-topGenes <- c(100,500)
-
-for (dim in dims) {
-  
-  for (numGenes in topGenes) {
-      
-    mds <- plotMDS(data, 
-                   labels = names, 
-                   top = numGenes,
-                   plot = FALSE,
-                   dim.plot = dim)
-
-    toplot <- data.frame(DimX = mds$x, 
-                         DimY = mds$y,
-                         Sample = rownames(mds$distance.matrix.squared),
-                         extraction = dge$samples$RNA_extraction_batch)
-    
-    x.lab <- paste0(mds$axislabel," ",mds$dim.plot[1]," (",
-                    round(mds$var.explained[mds$dim.plot[1]] * 100, digits = 2),
-                    "%)")
-    y.lab <- paste0(mds$axislabel," ",mds$dim.plot[2]," (",
-                    round(mds$var.explained[mds$dim.plot[2]] * 100, digits = 2),
-                    "%)")
-    
-    p <- ggplot(toplot, aes(x = DimX, y = DimY, color = extraction, label = Sample)) + 
-      geom_point(size = 3) +
-      scale_color_manual(values = c("black","gray",
-                                    "red","orange",
-                                    "yellow","green3",
-                                    "blue2","purple")) +
-      theme_bw() +
-      geom_text(aes(label = Sample), size=4, vjust = -1) +
-      xlab(x.lab) + ylab(y.lab) + 
-      ggtitle(paste0("MDS Raw: Top ", numGenes, ", Log2(CPM)"))
-    print(p)
-    
-    # save
-    dimTitle <- as.character(dim)
-    path <- paste0(out,"prefiltering_QC/MDS_top_",
-                   numGenes,"_genes/MDS_raw_top_", numGenes, "_",
-                   "dim", as.character(dim)[1], "&", as.character(dim[2]), 
-                   "_colored_by_extraction")
     saveToPDF(paste0(path, ".pdf"), width = 8, height = 8)
   }
 }
@@ -500,6 +422,29 @@ write.table(tpm, path, quote = FALSE, sep = "\t")
 remove(counts,cpm,fpk,fpkm,tpm)
 ```
 
+## Library
+```{r}
+# extract data
+df <- data.frame(sample = dge$samples$sample_name,
+                 library = dge$samples$lib.size,
+                 group = dge$samples$group)
+  
+# plot
+p <- ggplot(data = df, mapping = aes(x = sample, y = library, fill = group)) +
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  labs(x = "Sample", y = "Library Size") +
+  scale_x_discrete(limits = df$sample) +
+  theme_classic() +
+  scale_fill_manual(values = group_colors) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+p
+  
+# save
+path <- paste0(out,"prefiltering_QC/library_size_bar_graph_raw")
+saveToPDF(paste0(path, ".pdf"), width = 25, height = 6)
+dev.off()
+```
 
 # Filtering and normalization
 ## Lowly expressed genes
@@ -508,13 +453,13 @@ start <- dim(dge)[1]
 
 # get dataframes
 cpm <- as.data.frame(cpm(dge))
-meta <- dge$samples[,c("sample_id","group")]
+meta <- dge$samples[,c("sample_name","group")]
 
 # find CPM avg per group
 mean.group <- cpm |>
   mutate(gene = row.names(cpm)) |>
-  pivot_longer(-gene, names_to = "sample_id") |>
-  left_join(meta, by = "sample_id") |>
+  pivot_longer(-gene, names_to = "sample_name") |>
+  left_join(meta, by = "sample_name") |>
   summarize(mean = mean(value), .by = c(gene, group)) |>
   pivot_wider(names_from = group, values_from = mean)
 mean.group <- as.data.frame(mean.group)
@@ -535,27 +480,22 @@ write.table(x = mean.group,
 #keep <- mean.group$rsums >= 1 # genes with at least 1 CPM in 1 group
 #dge.filtered <- dge[keep,,keep.lib.sizes = FALSE]
 
-# Option 2 filtering method
-# all samples in a group (sal/psi) must have CPM >= 1
-# create separate df
-sal.samples <- dge$samples$sample_id[dge$samples$treatment %in% "saline"]
-num.sal <- length(sal.samples)
-psi.samples <- dge$samples$sample_id[dge$samples$treatment %in% "psilocybin"]
-num.psi <- length(psi.samples)
-# true when CPM >= 1
-sal.df <- cpm[,colnames(cpm) %in% sal.samples] >= 1
-psi.df <- cpm[,colnames(cpm) %in% psi.samples] >= 1
-# find row sum
-sal.df <- as.data.frame(sal.df)
-psi.df <- as.data.frame(psi.df)
-sal.df$rsum <- as.numeric(Matrix::rowSums(sal.df))
-psi.df$rsum <- as.numeric(Matrix::rowSums(psi.df))
-# keep if all samples in group had CPM >= 1
-sal.df$keep <- sal.df$rsum == num.sal
-psi.df$keep <- psi.df$rsum == num.psi
-# keep gene if TRUE in sal or psi df
-keep <- sal.df$keep | psi.df$keep
-dge.filtered <- dge[keep,,keep.lib.sizes = FALSE]
+# all sample in a group (i.e. sal.8h) must have CPM >= 1
+# create df with summary of if group has all samples >= 1
+strict <- as.data.frame(cpm >= 1) |> 
+  mutate(gene = rownames(strict)) |>
+  pivot_longer(-gene, names_to = "sample_name") |>
+  left_join(meta, by = "sample_name") |>
+  summarize(thresh = all(value), .by = c(gene, group)) |>
+  pivot_wider(names_from = group, values_from = thresh)
+# summarize df - if any group meets the thresh then TRUE
+strict <- as.data.frame(strict)
+rownames(strict) <- strict$gene
+strict$gene <- NULL
+strict$pass <- apply(X = strict, MARGIN = 1, FUN = any)
+
+# filter
+dge.filtered <- dge[strict$pass,,keep.lib.sizes = FALSE]
 
 # save
 mean.group.final <- mean.group[keep,]
@@ -566,7 +506,7 @@ write.table(x = mean.group.final,
 
 end <- dim(dge.filtered)[1]
 print(paste(start - end, "genes removed and", end, "genes leftover."))
-remove(meta,mean.group,cpm,keep,start,end,mean.group.final,psi.df,sal.df)
+remove(meta,mean.group,cpm,keep,start,end,mean.group.final,strict)
 ```
 
 ## TMM
@@ -594,18 +534,18 @@ par(mfrow = c(1,3))
 
 # Normalize data for library size and expression intesntiy
 log2cpm.raw <- cpm(dge, log = TRUE)
-colnames(log2cpm.raw) <- dge$samples$sample_id
+colnames(log2cpm.raw) <- dge$samples$sample_name
 log2cpm.filtered <- cpm(dge.filtered, log = TRUE)
-colnames(log2cpm.filtered) <- dge.filtered$samples$sample_id
+colnames(log2cpm.filtered) <- dge.filtered$samples$sample_name
 log2cpm.norm <- cpm(dge.filtered.norm, log = TRUE)
-colnames(log2cpm.norm) <- dge.filtered.norm$samples$sample_id
+colnames(log2cpm.norm) <- dge.filtered.norm$samples$sample_name
 
 # set colors
-colors <- treatment_colors[dge$samples$treatment]
+colors <- group_colors[dge.filtered.norm$samples$group]
 nsamples <- ncol(dge)
 
 # First, plot the first column of the log2cpm.raw density
-plot(density(log2cpm.raw[,1]), col = colors[1], lwd = 2, ylim = c(0,0.2), 
+plot(density(log2cpm.raw[,1]), col = colors[1], lwd = 2, ylim = c(0,0.25), 
      las = 2, main = "A. Raw", xlab = expression('Log'[2]~CPM))
 
 # For each sample plot the lcpm density
@@ -615,7 +555,7 @@ for (i in 2:nsamples){
 }
 
 # Second, plot log2cpm.filtered
-plot(density(log2cpm.filtered[,1]), col = colors[1], lwd = 2, ylim = c(0,0.2), 
+plot(density(log2cpm.filtered[,1]), col = colors[1], lwd = 2, ylim = c(0,0.25), 
      las = 2, main = "B. Filtered", xlab = expression('Log'[2]~CPM))
 abline(v = cpm(3, log = TRUE), lty = 3)
 for (i in 2:nsamples) {
@@ -624,7 +564,7 @@ for (i in 2:nsamples) {
 }
 
 # Third, plot log2cpm.norm
-plot(density(log2cpm.norm[,1]), col = colors[1], lwd = 2, ylim = c(0,0.2), 
+plot(density(log2cpm.norm[,1]), col = colors[1], lwd = 2, ylim = c(0,0.25), 
      las = 2, main = "C. Normalized", xlab = expression('Log'[2]~CPM))
 abline(v = cpm(3, log = TRUE), lty = 3)
 for (i in 2:nsamples) {
@@ -641,7 +581,7 @@ remove(den)
 ## Boxplots
 ```{r boxplots}
 # set parameters
-par(mfrow = c(1,3))
+par(mfrow = c(3,1))
 
 # First look at dge.tech
 boxplot(log2cpm.raw, 
@@ -682,7 +622,7 @@ axis(1,at=1:nsamples,labels=colnames(log2cpm.norm),las=2,cex.axis=0.8)
 
 # save
 path <- paste0(out, "postfiltering_QC/counts_per_gene_boxplot")
-saveToPDF(paste0(path, ".pdf"), width = 20, height = 10)
+saveToPDF(paste0(path, ".pdf"), width = 25, height = 20)
 #remove(log2cpm.raw, log2cpm.norm, log2cpm.filtered)
 ```
 

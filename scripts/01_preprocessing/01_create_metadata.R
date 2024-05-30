@@ -103,8 +103,8 @@ mouse.meta <- dplyr::left_join(x = mouse.meta,
                                y = tgen.meta,
                                by = "filename")
 
-# Note: animal 210 had to be resequenced
-# NA values for 210
+# Note: animal 210 had to be re-sequenced
+mouse.meta <- mouse.meta[!mouse.meta$animal_id == 210,]
 
 # save meta
 write.table(x = mouse.meta, file = "../../refs/metadata.tsv", sep = "\t",

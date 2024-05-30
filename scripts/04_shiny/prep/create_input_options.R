@@ -6,7 +6,7 @@ filenames <- list.files("../DEGs")
 df <- data.frame(filename = filenames)
 
 # parse groups in comparison
-res <- stringr::str_match(filenames, "(.+)_vs_(.+)_FDRq_1.00.tsv")
+res <- stringr::str_match(filenames, "(.+)_vs_(.+)_FDRq_1.00_LFC_0.00.tsv")
 res <- as.data.frame(res)
 
 # rename cols
