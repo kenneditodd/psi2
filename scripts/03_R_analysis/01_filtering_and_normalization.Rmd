@@ -2,7 +2,7 @@
 title: "Psilocybin Project 2"
 subtitle: "Filtering and Normalization"
 author: "Kennedi Todd"
-date: "05/27/2024"
+date: "06/03/2024"
 output:
   html_document:
     theme: cerulean
@@ -137,6 +137,14 @@ remove(counts, meta, genes)
 
 # set levels
 dge$samples$sex <- factor(dge$samples$sex, levels = sex_order)
+
+# run_flowcell_lane
+dge$samples$run_flowcell_lane <- gsub("87_22HVM7LT3_8","Run1_Lane8",dge$samples$run_flowcell_lane)
+dge$samples$run_flowcell_lane <- gsub("89_22JGCYLT3_5","Run2_Lane5",dge$samples$run_flowcell_lane)
+dge$samples$run_flowcell_lane <- gsub("89_22JGCYLT3_6","Run2_Lane6",dge$samples$run_flowcell_lane)
+dge$samples$run_flowcell_lane <- gsub("89_22JGCYLT3_7","Run2_Lane7",dge$samples$run_flowcell_lane)
+dge$samples$run_flowcell_lane <- gsub("89_22JGCYLT3_8","Run2_Lane8",dge$samples$run_flowcell_lane)
+table(dge$samples$run_flowcell_lane)
 ```
 
 ## Remove MT genes
@@ -152,6 +160,39 @@ dim(dge)
 dim(dge)
 keep <- dge$genes$gene_type == "protein_coding"
 dge <- dge[keep,,keep.lib.sizes = FALSE]
+dim(dge)
+```
+
+## Optional sample filtering
+```{r}
+if (out == "../../results/low_lib_removed_strict/") {
+  keep <- dge$samples$lib.size > 15000000
+  dge <- dge[,keep]
+} else if (out == "../../results/8_hours_low_lib_removed_strict/") {
+  keep <- dge$samples$timepoint == "8 hour"
+  dge <- dge[,keep]
+  keep <- dge$samples$lib.size > 15000000
+  dge <- dge[,keep]
+  group_colors <- c("#9A9A9A","#FA8A8A","#EFF964",
+                    "#59C751","#60ABF6","#9D54DE")
+} else if (out == "../../results/24_hours_low_lib_removed_strict/") {
+  keep <- dge$samples$timepoint == "24 hour"
+  dge <- dge[,keep]
+  keep <- dge$samples$lib.size > 15000000
+  dge <- dge[,keep]
+  group_colors <- c("#9A9A9A","#FA8A8A","#EFF964",
+                    "#59C751","#60ABF6","#9D54DE")
+} else if (out == "../../results/7_days_low_lib_removed_strict/") {
+  keep <- dge$samples$timepoint == "7 day"
+  dge <- dge[,keep]
+  keep <- dge$samples$lib.size > 15000000
+  dge <- dge[,keep]
+  group_colors <- c("#9A9A9A","#FA8A8A","#EFF964",
+                    "#59C751","#60ABF6","#9D54DE")
+} else if (out == "../../results/low_lib_removed_lax/") {
+  keep <- dge$samples$lib.size > 15000000
+  dge <- dge[,keep]
+}
 dim(dge)
 ```
 
@@ -202,18 +243,18 @@ round.data <- round(data, digits = 4) # round 2 decimal places
 
 # save
 path <- paste0(out,"prefiltering_QC/JSD_heatmap.pdf")
-pdf(path, width = 15, height = 15)
+pdf(path, width = 25, height = 25)
 
 # set heatmap colors and names
 meta <- dge$samples[,c("treatment","sex")]
 rownames(meta) <- names
 paletteLength <- 100
 myColor <- colorRampPalette(c("blue", "skyblue", "white"))(paletteLength)
-ann_colors = list(treatment = c(Saline="lightgray", 
+ann_colors = list(sex = c(Male="gold", Female="purple"),
+                  treatment = c(Saline="lightgray", 
                                 Ketanserin="cornflowerblue",
                                 Psilocybin="springgreen2",
-                                `Ketanserin+Psilocybin`="tomato"),
-                  sex = c(Male="gold", Female="purple"))
+                                `Ketanserin+Psilocybin`="tomato"))
 
 pheatmap::pheatmap(round.data,
                    treeheight_row = 0,
@@ -292,7 +333,7 @@ data <- cpm(dge$counts, log = TRUE)
 names <- dge$samples$sample_name
 
 # loop through dimensions and top genes
-dims <- list(c(1,2),c(2,3),c(3,4))
+dims <- list(c(1,2),c(2,3),c(3,4),c(4,5))
 topGenes <- c(100,500)
 
 for (dim in dims) {
@@ -393,6 +434,117 @@ for (dim in dims) {
 remove(data)
 ```
 
+### Library size
+```{r MDS_colored_by_library_size}
+# set colors and get data
+data <- cpm(dge$counts, log = TRUE)
+names <- dge$samples$sample_name
+
+# loop through dimensions and top genes
+dims <- list(c(1,2),c(2,3),c(3,4))
+topGenes <- c(100,500)
+
+for (dim in dims) {
+  
+  for (numGenes in topGenes) {
+      
+    mds <- plotMDS(data, 
+                   labels = names, 
+                   top = numGenes,
+                   plot = FALSE,
+                   dim.plot = dim)
+
+    toplot <- data.frame(DimX = mds$x, 
+                         DimY = mds$y,
+                         Sample = rownames(mds$distance.matrix.squared),
+                         treatment = dge$samples$treatment,
+                         library_size = dge$samples$lib.size)
+    
+    x.lab <- paste0(mds$axislabel," ",mds$dim.plot[1]," (",
+                    round(mds$var.explained[mds$dim.plot[1]] * 100, digits = 2),
+                    "%)")
+    y.lab <- paste0(mds$axislabel," ",mds$dim.plot[2]," (",
+                    round(mds$var.explained[mds$dim.plot[2]] * 100, digits = 2),
+                    "%)")
+    
+    p <- ggplot(toplot, aes(x = DimX, y = DimY, 
+                            color = library_size, label = Sample)) + 
+      geom_point(size = 3) +
+      scale_color_gradientn(colors = c("red","yellow","lightblue","blue")) +
+      theme_bw() +
+      geom_text(aes(label = Sample), size=4, vjust = -1) +
+      xlab(x.lab) + ylab(y.lab) + 
+      ggtitle(paste0("MDS Raw: Top ", numGenes, ", Log2(CPM)"))
+    print(p)
+    
+    # save
+    dimTitle <- as.character(dim)
+    path <- paste0(out,"prefiltering_QC/MDS_top_",
+                   numGenes,"_genes/MDS_raw_top_", numGenes, "_",
+                   "dim", as.character(dim)[1], "&", as.character(dim[2]), 
+                   "_colored_by_library_size")
+    saveToPDF(paste0(path, ".pdf"), width = 8, height = 8)
+  }
+}
+
+remove(data)
+```
+
+### Batch
+```{r MDS_colored_by_batch}
+# set colors and get data
+data <- cpm(dge$counts, log = TRUE)
+names <- dge$samples$sample_name
+
+# loop through dimensions and top genes
+dims <- list(c(1,2),c(2,3),c(3,4))
+topGenes <- c(100,500)
+
+for (dim in dims) {
+  
+  for (numGenes in topGenes) {
+      
+    mds <- plotMDS(data, 
+                   labels = names, 
+                   top = numGenes,
+                   plot = FALSE,
+                   dim.plot = dim)
+
+    toplot <- data.frame(DimX = mds$x, 
+                         DimY = mds$y,
+                         Sample = rownames(mds$distance.matrix.squared),
+                         treatment = dge$samples$treatment,
+                         sequencing_batch = dge$samples$run_flowcell_lane)
+    
+    x.lab <- paste0(mds$axislabel," ",mds$dim.plot[1]," (",
+                    round(mds$var.explained[mds$dim.plot[1]] * 100, digits = 2),
+                    "%)")
+    y.lab <- paste0(mds$axislabel," ",mds$dim.plot[2]," (",
+                    round(mds$var.explained[mds$dim.plot[2]] * 100, digits = 2),
+                    "%)")
+    
+    p <- ggplot(toplot, aes(x = DimX, y = DimY, 
+                            color = sequencing_batch, label = Sample)) + 
+      geom_point(size = 3) +
+      theme_bw() +
+      geom_text(aes(label = Sample), size=4, vjust = -1) +
+      xlab(x.lab) + ylab(y.lab) + 
+      ggtitle(paste0("MDS Raw: Top ", numGenes, ", Log2(CPM)"))
+    print(p)
+    
+    # save
+    dimTitle <- as.character(dim)
+    path <- paste0(out,"prefiltering_QC/MDS_top_",
+                   numGenes,"_genes/MDS_raw_top_", numGenes, "_",
+                   "dim", as.character(dim)[1], "&", as.character(dim[2]), 
+                   "_colored_by_sequencing_batch")
+    saveToPDF(paste0(path, ".pdf"), width = 8, height = 8)
+  }
+}
+
+remove(data)
+```
+
 ## CPM, FPKM, TPM
 ```{r cpm_fpkm_tpm}
 # CPM, Counts Per Million
@@ -424,25 +576,57 @@ remove(counts,cpm,fpk,fpkm,tpm)
 
 ## Library
 ```{r}
+# outlier function
+is_outlier <- function(x) {
+  return(x < quantile(x, 0.25) - 1.5 * IQR(x) | x > quantile(x, 0.75) + 1.5 * IQR(x))
+}
+
 # extract data
-df <- data.frame(sample = dge$samples$sample_name,
-                 library = dge$samples$lib.size,
+df <- data.frame(project = "Psi2_all_samples",
+                 sample = dge$samples$sample_name,
+                 lib = dge$samples$lib.size,
+                 log2.lib = log2(dge$samples$lib.size),
                  group = dge$samples$group)
-  
+
+df %>%
+  group_by(project) %>%
+  mutate(outlier = ifelse(is_outlier(lib), lib, as.numeric(NA))) %>%
+  ggplot(., aes(x = factor(project), y = lib)) +
+    geom_boxplot() +
+    geom_text(aes(label = sample), na.rm = TRUE, hjust = -0.3)
+
 # plot
-p <- ggplot(data = df, mapping = aes(x = sample, y = library, fill = group)) +
-  geom_col() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-  labs(x = "Sample", y = "Library Size") +
-  scale_x_discrete(limits = df$sample) +
-  theme_classic() +
-  scale_fill_manual(values = group_colors) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-p
-  
+b1 <- ggplot(data = df, mapping = aes(x = project, y = lib)) +
+  geom_boxplot() +
+  geom_text(aes(label = sample), na.rm = TRUE, hjust = -0.3) +
+  labs(y = "Library Size", x ="Samples") +
+  geom_hline(yintercept = 15000000, color = "red", linetype = "dashed")
+b1
 # save
-path <- paste0(out,"prefiltering_QC/library_size_bar_graph_raw")
-saveToPDF(paste0(path, ".pdf"), width = 25, height = 6)
+path <- paste0(out,"prefiltering_QC/library_boxplot_raw")
+saveToPDF(paste0(path, ".pdf"), width = 10, height = 6)
+dev.off()
+
+# plot
+b2 <- ggplot(data = df, mapping = aes(x = group, y = lib, fill = group)) +
+  geom_boxplot() +
+  geom_text(aes(label = sample), na.rm = TRUE, hjust = -0.3) +
+  labs(y = "Library Size", x ="Group") +
+  geom_hline(yintercept = 15000000, color = "red", linetype = "dashed")
+b2
+# save
+path <- paste0(out,"prefiltering_QC/library_split_group_boxplot_raw")
+saveToPDF(paste0(path, ".pdf"), width = 18, height = 6)
+dev.off()
+
+# plot
+b3 <- ggplot(data = df, mapping = aes(x = project, y = log2.lib)) +
+  geom_boxplot() +
+  geom_text(aes(label = sample), na.rm = TRUE, hjust = -0.3)
+b3
+# save
+path <- paste0(out,"prefiltering_QC/log2_library_boxplot_raw")
+saveToPDF(paste0(path, ".pdf"), width = 6, height = 6)
 dev.off()
 ```
 
@@ -454,6 +638,8 @@ start <- dim(dge)[1]
 # get dataframes
 cpm <- as.data.frame(cpm(dge))
 meta <- dge$samples[,c("sample_name","group")]
+meta <- meta |> group_by(group) |> mutate(group_size = n())
+meta$min_samples <- floor(meta$group_size * 0.8)
 
 # find CPM avg per group
 mean.group <- cpm |>
@@ -466,39 +652,50 @@ mean.group <- as.data.frame(mean.group)
 rownames(mean.group) <- mean.group$gene
 mean.group$gene <- NULL
 mean.group <- round(mean.group, digits = 4)
-
 # save
 write.table(x = mean.group, 
-            file = paste0(out, "counts/avgCPM_per_group_before_filtering.tsv"),
+            file = paste0(out,"counts/avgCPM_per_group_before_filtering.tsv"),
             quote = FALSE,
             sep = "\t")
 
 # Option 1 filtering method
-# one group must have CPM > 1
-#mean.group <- as.data.frame(mean.group > 1) # true when CPM > 1
-#mean.group$rsums <- Matrix::rowSums(mean.group) # num groups with CPM > 1
-#keep <- mean.group$rsums >= 1 # genes with at least 1 CPM in 1 group
-#dge.filtered <- dge[keep,,keep.lib.sizes = FALSE]
-
-# all sample in a group (i.e. sal.8h) must have CPM >= 1
-# create df with summary of if group has all samples >= 1
+# floor(80% samples of a group) must have CPM >= 1
 strict <- as.data.frame(cpm >= 1) |> 
-  mutate(gene = rownames(strict)) |>
+  mutate(gene = rownames(cpm)) |>
   pivot_longer(-gene, names_to = "sample_name") |>
   left_join(meta, by = "sample_name") |>
-  summarize(thresh = all(value), .by = c(gene, group)) |>
-  pivot_wider(names_from = group, values_from = thresh)
-# summarize df - if any group meets the thresh then TRUE
+  summarize(samples_meeting_thresh = sum(value), 
+            .by = c(gene, group, group_size, min_samples))|>
+  mutate(meets_thresh = samples_meeting_thresh >= min_samples) |>
+  select (-c(group_size, min_samples, samples_meeting_thresh)) |>
+  pivot_wider(names_from = group, values_from = meets_thresh)
 strict <- as.data.frame(strict)
 rownames(strict) <- strict$gene
 strict$gene <- NULL
 strict$pass <- apply(X = strict, MARGIN = 1, FUN = any)
+all.equal(rownames(strict), rownames(dge))
+# check with Myocd
+
+# all samples in a group (i.e. sal.8h) must have CPM >= 1
+# create df with summary of if group has all samples >= 1
+#strict <- as.data.frame(cpm >= 1) |> 
+#  mutate(gene = rownames(cpm)) |>
+#  pivot_longer(-gene, names_to = "sample_name") |>
+#  left_join(meta, by = "sample_name") |>
+#  summarize(thresh = all(value), .by = c(gene, group)) |>
+#  pivot_wider(names_from = group, values_from = thresh, )
+# summarize df - if any group meets the thresh then TRUE
+#strict <- as.data.frame(strict)
+#rownames(strict) <- strict$gene
+#strict$gene <- NULL
+#strict$pass <- apply(X = strict, MARGIN = 1, FUN = any)
+#all.equal(rownames(strict),rownames(dge))
 
 # filter
 dge.filtered <- dge[strict$pass,,keep.lib.sizes = FALSE]
 
 # save
-mean.group.final <- mean.group[keep,]
+mean.group.final <- mean.group[strict$pass,]
 write.table(x = mean.group.final, 
             file = paste0(out, "counts/avgCPM_per_group_after_filtering.tsv"),
             quote = FALSE,
@@ -506,7 +703,7 @@ write.table(x = mean.group.final,
 
 end <- dim(dge.filtered)[1]
 print(paste(start - end, "genes removed and", end, "genes leftover."))
-remove(meta,mean.group,cpm,keep,start,end,mean.group.final,strict)
+remove(meta,mean.group,cpm,start,end,mean.group.final,strict)
 ```
 
 ## TMM
@@ -583,7 +780,7 @@ remove(den)
 # set parameters
 par(mfrow = c(3,1))
 
-# First look at dge.tech
+# First look at dge
 boxplot(log2cpm.raw, 
         main="A. Raw", 
         xlab="", 

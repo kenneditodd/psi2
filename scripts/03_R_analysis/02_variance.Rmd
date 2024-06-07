@@ -32,8 +32,8 @@ library(variancePartition) # fitExtractVarPartModel()
 
 ## User defined variables
 ```{r set_variables}
-out <- "../../results/all_samples_strict/"
-out2 <- "all_samples_strict"
+out <- "../../results/7_days_low_lib_removed_strict/"
+out2 <- "7_days_low_lib_removed_strict"
 sex_order <- c("Male","Female")
 sex_colors <- c("gold2","purple")
 group_order <- c("S.8h","K.8h","L.8h","H.8h","KL.8h","KH.8h",
@@ -118,14 +118,14 @@ meta <- cbind(meta, cpm)
 ## Significance
 ```{r stats}
 # Set comparison values
-x <- "S.7d"
-y <- "KL.7d"
+x <- "S.7d" # control
+y <- "KL.7d" # treatment
 
 # preview variables - only want numerical values
 colnames(meta)
 
 # initialize table
-variable_numbers <- c(7:17)
+variable_numbers <- c(6:16)
 variable_names <- colnames(meta)[variable_numbers]
 tests <- c("control_mean","treatment_mean",
            "control_stdv","treatment_stdv",
@@ -208,29 +208,36 @@ remove(control_shapiro,treatment_shapiro,
 - Spearman's correlation can be used to analyze categorical data, as well as continuous data, because it uses ranks instead of assumptions of normality plotCorrMatrix(cor(info)) \
 ```{r spearman_heatmap}
 # save
-path <- paste0(out, "variance/spearman_correlation_heatmap.pdf")
+path <- paste0(out, "variance/spearman_correlation_heatmap1.pdf")
 pdf(path, width = 10, height = 10)
-
 # formula
-form <- ~0 + group +  sex + log2.lib + run_flowcell_lane
-
+form <- ~0 + treatment + dose + log2.lib + sex + run_flowcell_lane
 # correlation plot
 model.matrix(form, data = meta) %>% 
   cor(method = "spearman") %>% 
   ggcorrplot(show.diag = FALSE, type = "lower", lab = TRUE, lab_size = 2)
+dev.off()
+
+# save
+path <- paste0(out, "variance/spearman_correlation_heatmap2.pdf")
+pdf(path, width = 10, height = 10)
+# formula
+form <- ~0 + group + log2.lib + sex + run_flowcell_lane
+# correlation plot
+model.matrix(form, data = meta) %>% 
+  cor(method = "spearman") %>% 
+  ggcorrplot(show.diag = FALSE, type = "lower", lab = TRUE, lab_size = 2)
+dev.off()
 ```
 
 ## CCA heatmap
 ```{r CCA_heatmap}
 # save
-path <- paste0(out, "variance/canonical_correlation_analysis_heatmap.pdf")
+path <- paste0(out, "variance/canonical_correlation_analysis_heatmap1.pdf")
 pdf(path, width = 8, height = 8)
-
 # formula
-form <- ~0 + group +  sex + log2.lib + run_flowcell_lane
-
+form <- ~0 + treatment + dose + sex + log2.lib + run_flowcell_lane
 c <- canCorPairs(form, meta)
-
 corrplot(c,
          type = "lower",
          is.corr = FALSE,
@@ -242,6 +249,26 @@ corrplot(c,
          tl.cex = 0.8,
          number.cex = 0.7,
          diag = TRUE)
+dev.off()
+
+# save
+path <- paste0(out, "variance/canonical_correlation_analysis_heatmap2.pdf")
+pdf(path, width = 8, height = 8)
+# formula
+form <- ~0 + group + sex + log2.lib + run_flowcell_lane
+c <- canCorPairs(form, meta)
+corrplot(c,
+         type = "lower",
+         is.corr = FALSE,
+         order = "hclust",
+         col = colorRampPalette(c("blue4", "deepskyblue", "white"))(100),
+         addCoef.col = TRUE,
+         method = "shade",
+         tl.col = "black",
+         tl.cex = 0.8,
+         number.cex = 0.7,
+         diag = TRUE)
+dev.off()
 ```
 
 # Variance partition
@@ -250,20 +277,28 @@ corrplot(c,
 # variables to choose from
 geneExpr <- as.matrix(dge.filtered.norm$counts)
 colnames(meta)
-
 # age is usually a continuous so model it as a fixed effect "age"
 # group is categorical, so model them as random effects "(1|group)"
-form <- ~ (1|group) + (1|sex) + log2.lib
-
+form <- ~ (1|treatment) + (1|dose) + (1|sex)
 varPart <- fitExtractVarPartModel(geneExpr, form, meta)
 vp <- sortCols(varPart)
-saveRDS(vp, paste0("../../rObjects/", out2, "_var_par.rds"))
+saveRDS(vp, paste0("../../rObjects/", out2, "_var_par1.rds"))
+
+# variables to choose from
+geneExpr <- as.matrix(dge.filtered.norm$counts)
+colnames(meta)
+# age is usually a continuous so model it as a fixed effect "age"
+# group is categorical, so model them as random effects "(1|group)"
+form <- ~ (1|group) + (1|sex)
+varPart <- fitExtractVarPartModel(geneExpr, form, meta)
+vp <- sortCols(varPart)
+saveRDS(vp, paste0("../../rObjects/", out2, "_var_par2.rds"))
 ```
 
 ## Violins
 ```{r variance_violins, eval=FALSE}
 # save
-path <- paste0(out, "variance/variance_violins.pdf")
+path <- paste0(out, "variance/variance_violins2.pdf")
 pdf(path, width = 12, height = 6)
 
 # plot
@@ -273,7 +308,7 @@ plotVarPart(vp)
 ## Percent bars
 ```{r variance_percent_bars}
 # save
-path <- paste0(out, "variance/variance_gene_percent_bars.pdf")
+path <- paste0(out, "variance/variance_gene_percent_bars2.pdf")
 pdf(paste0(path, ".pdf"), width = 12, height = 6)
 
 # plot

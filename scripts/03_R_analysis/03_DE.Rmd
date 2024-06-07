@@ -46,9 +46,9 @@ library(reshape)            # melt()
 
 ## User defined variables
 ```{r set_variables}
-model <- "DEGs_sex_specific/"
-out <- "../../results/all_samples_strict/"
-out2 <- "all_samples_strict"
+model <- "DEGs_both_sexes/"
+out <- "../../results/low_lib_removed_lax/"
+out2 <- "low_lib_removed_lax"
 sex_order <- c("Male","Female")
 sex_colors <- c("gold2","purple")
 group_order <- c("S.8h","K.8h","L.8h","H.8h","KL.8h","KH.8h",
@@ -57,6 +57,11 @@ group_order <- c("S.8h","K.8h","L.8h","H.8h","KL.8h","KH.8h",
 group_colors <- c("#E9E9E9","#FFD0D0","#F7FCB9","#9DF097","#B5DAFF","#CE9FF7",
                   "#9A9A9A","#FA8A8A","#EFF964","#59C751","#60ABF6","#9D54DE",
                   "#545252","#F64646","#CEDC04","#219218","#086CD0","#6612B0")
+if (out == "../../results/8_hours_low_lib_removed_strict/" |
+    out == "../../results/24_hours_low_lib_removed_strict/" |
+    out == "../../results/7_days_low_lib_removed_strict/") {
+  group_colors <-  c("#9A9A9A","#FA8A8A","#EFF964","#59C751","#60ABF6","#9D54DE")
+}
 ```
 
 ## Save functions
@@ -77,19 +82,25 @@ dge.filtered.norm <- readRDS(paste0("../../rObjects/",
 # Voom
 ## Design matrix
 ```{r design_matrix}
-#group <- interaction(dge.filtered.norm$samples$group)
-group <- dge.filtered.norm$samples$group2
-#sex <- factor(dge.filtered.norm$samples$sex)
+group <- interaction(dge.filtered.norm$samples$group)
+sex <- factor(dge.filtered.norm$samples$sex)
+#group <- dge.filtered.norm$samples$group2
 
-design <- model.matrix(~ 0 + group)
+design <- model.matrix(~ 0 + group + sex)
 design.names <- gsub("group","", colnames(design))
-#design.names <- gsub("sex", "", design.names)
+design.names <- gsub("sex", "", design.names)
 colnames(design) <- design.names
 head(design)
 ```
 
 ## Contrasts
 ```{r}
+contrasts8 <- c("L.8h - S.8h", "H.8h - S.8h", "K.8h - S.8h",
+                 "KL.8h - S.8h", "KH.8h - S.8h")
+contrasts24 <- c("L.24h - S.24h", "H.24h - S.24h", "K.24h - S.24h",
+                 "KL.24h - S.24h", "KH.24h - S.24h")
+contrasts7 <- c("L.7d - S.7d", "H.7d - S.7d", "K.7d - S.7d",
+                 "KL.7d - S.7d", "KH.7d - S.7d")
 myContrasts <- c("L.8h - S.8h", "H.8h - S.8h", "K.8h - S.8h",
                  "KL.8h - S.8h", "KH.8h - S.8h",
                  "L.24h - S.24h", "H.24h - S.24h", "K.24h - S.24h",
@@ -102,7 +113,7 @@ myContrasts <- c("L.8h - S.8h", "H.8h - S.8h", "K.8h - S.8h",
                  "K.24h - K.8h", "K.7d - K.24h",
                  "KL.24h - KL.8h", "KL.7d - KL.24h",
                  "KH.24h - KH.8h", "KH.7d - KH.24h")
-myContrast2 <- c("L.8h.M - S.8h.M", "H.8h.M - S.8h.M", "K.8h.M - S.8h.M",
+myContrasts2 <- c("L.8h.M - S.8h.M", "H.8h.M - S.8h.M", "K.8h.M - S.8h.M",
                  "KL.8h.M - S.8h.M", "KH.8h.M - S.8h.M",
                  "L.24h.M - S.24h.M", "H.24h.M - S.24h.M", "K.24h.M - S.24h.M",
                  "KL.24h.M - S.24h.M", "KH.24h.M - S.24h.M",
@@ -139,7 +150,7 @@ fit <- lmFit(v, design)
 
 # contrast design for differential expression
 contrasts <- makeContrasts(
-  contrasts = myContrast2,
+  contrasts = myContrasts,
   levels = design.names)
 head(contrasts)
 
@@ -261,10 +272,10 @@ for (dim in dims) {
 }
 ```
 
-### Batch
+### Treatment
 ```{r mds_postfiltering_treatment}
 # loop through dimensions and top genes
-names <- v$targets$run_flowcell_lane
+names <- v$targets$sample_name
 dims <- list(c(1,2),c(2,3),c(3,4))
 topGenes <- c(100,500)
 
@@ -281,7 +292,7 @@ for (dim in dims) {
     toplot <- data.frame(DimX = mds$x, 
                          DimY = mds$y,
                          Sample = rownames(mds$distance.matrix.squared),
-                         batch = v$targets$run_flowcell_lane)
+                         treatment = v$targets$treatment)
     
     x.lab <- paste0(mds$axislabel," ",mds$dim.plot[1]," (",
                     round(mds$var.explained[mds$dim.plot[1]] * 100, digits = 2),
@@ -290,7 +301,8 @@ for (dim in dims) {
                     round(mds$var.explained[mds$dim.plot[2]] * 100, digits = 2),
                     "%)")
     
-    p <- ggplot(toplot, aes(x = DimX, y = DimY, color = batch, label = Sample)) + 
+    p <- ggplot(toplot, 
+                aes(x = DimX, y = DimY, color = treatment, label = Sample)) + 
       geom_point(size = 3) +
       theme_bw() +
       geom_text(aes(label = Sample), size=4, vjust = -1) +
@@ -303,7 +315,107 @@ for (dim in dims) {
     path <- paste0(out, "postfiltering_QC/MDS_top_",
                    numGenes,"_genes/MDS_filtered_top_", numGenes, "_",
                    "dim", as.character(dim)[1], "&", as.character(dim[2]), 
-                   "_colored_by_batch")
+                   "_colored_by_treatment")
+    saveToPDF(paste0(path, ".pdf"), width = 8, height = 8)
+  }
+}
+```
+
+### Library size
+```{r mds_postfiltering_treatment}
+# loop through dimensions and top genes
+names <- v$targets$sample_name
+dims <- list(c(1,2),c(2,3),c(3,4))
+topGenes <- c(100,500)
+
+for (dim in dims) {
+  
+  for (numGenes in topGenes) {
+      
+    mds <- plotMDS(v, 
+                   labels = names, 
+                   top = numGenes,
+                   plot = FALSE,
+                   dim.plot = dim)
+
+    toplot <- data.frame(DimX = mds$x, 
+                         DimY = mds$y,
+                         Sample = rownames(mds$distance.matrix.squared),
+                         treatment = v$targets$treatment,
+                         library_size = v$targets$lib.size)
+    
+    x.lab <- paste0(mds$axislabel," ",mds$dim.plot[1]," (",
+                    round(mds$var.explained[mds$dim.plot[1]] * 100, digits = 2),
+                    "%)")
+    y.lab <- paste0(mds$axislabel," ",mds$dim.plot[2]," (",
+                    round(mds$var.explained[mds$dim.plot[2]] * 100, digits = 2),
+                    "%)")
+    
+    p <- ggplot(toplot, 
+                aes(x = DimX, y = DimY, color = library_size, label = Sample)) + 
+      geom_point(size = 3) +
+      scale_color_gradientn(colors = c("red","yellow","lightblue","blue")) +
+      theme_bw() +
+      geom_text(aes(label = Sample), size=4, vjust = -1) +
+      xlab(x.lab) + ylab(y.lab) + 
+      ggtitle(paste0("MDS Filtered: Top ", numGenes, ", Log2(CPM)"))
+    print(p)
+    
+    # save
+    dimTitle <- as.character(dim)
+    path <- paste0(out, "postfiltering_QC/MDS_top_",
+                   numGenes,"_genes/MDS_filtered_top_", numGenes, "_",
+                   "dim", as.character(dim)[1], "&", as.character(dim[2]), 
+                   "_colored_by_library_size")
+    saveToPDF(paste0(path, ".pdf"), width = 8, height = 8)
+  }
+}
+```
+
+### Sequencing batch
+```{r mds_postfiltering_sequencing_batch}
+# loop through dimensions and top genes
+names <- v$targets$sample_name
+dims <- list(c(1,2),c(2,3),c(3,4))
+topGenes <- c(100,500)
+
+for (dim in dims) {
+  
+  for (numGenes in topGenes) {
+      
+    mds <- plotMDS(v, 
+                   labels = names, 
+                   top = numGenes,
+                   plot = FALSE,
+                   dim.plot = dim)
+
+    toplot <- data.frame(DimX = mds$x, 
+                         DimY = mds$y,
+                         Sample = rownames(mds$distance.matrix.squared),
+                         sequencing_batch = v$targets$run_flowcell_lane)
+    
+    x.lab <- paste0(mds$axislabel," ",mds$dim.plot[1]," (",
+                    round(mds$var.explained[mds$dim.plot[1]] * 100, digits = 2),
+                    "%)")
+    y.lab <- paste0(mds$axislabel," ",mds$dim.plot[2]," (",
+                    round(mds$var.explained[mds$dim.plot[2]] * 100, digits = 2),
+                    "%)")
+    
+    p <- ggplot(toplot, 
+                aes(x = DimX, y = DimY, color = sequencing_batch, label = Sample)) + 
+      geom_point(size = 3) +
+      theme_bw() +
+      geom_text(aes(label = Sample), size=4, vjust = -1) +
+      xlab(x.lab) + ylab(y.lab) + 
+      ggtitle(paste0("MDS Filtered: Top ", numGenes, ", Log2(CPM)"))
+    print(p)
+    
+    # save
+    dimTitle <- as.character(dim)
+    path <- paste0(out, "postfiltering_QC/MDS_top_",
+                   numGenes,"_genes/MDS_filtered_top_", numGenes, "_",
+                   "dim", as.character(dim)[1], "&", as.character(dim[2]), 
+                   "_colored_by_sequencing_batch")
     saveToPDF(paste0(path, ".pdf"), width = 8, height = 8)
   }
 }
@@ -313,8 +425,8 @@ for (dim in dims) {
 ## Number of DEGs
 Identify number of differentially expressed genes.
 ```{r decide_tests}
-pval <- 0.1
-my.lfc <- 0
+pval <- 0.05
+my.lfc <- 0.2
 
 sumTable <- 
   summary(decideTests(
@@ -392,6 +504,42 @@ pheatmap::pheatmap(df,
                    number_color = "black")
 ```
 
+## DEG heatmap single time point
+```{r}
+# reformat before plotting
+df <- as.data.frame(sumTable)
+colnames(df) <- c("direction", "comparison", "count")
+df <- df[!df$direction == "NotSig",]
+df$comparison <- gsub(" - ", "_vs_", df$comparison)
+df <- df %>% pivot_wider(names_from = comparison, values_from = count)
+df <- data.frame(df)
+rownames(df) <- df$direction
+df$direction <- NULL
+df <- t(df)
+
+
+paletteLength <- 100
+myColor <- colorRampPalette(c("white","#f0eb9e","darkgreen"))(paletteLength)
+
+# save
+path <- paste0(out, model, "/DEG_tables/DEG_comparison_FDRq_",
+               format(pval, nsmall = 2),
+               "_LFC_", format(my.lfc, nsmall = 2),".pdf")
+pdf(path, width = 8, height = 9)
+
+# plot
+pheatmap::pheatmap(df,
+                   main = paste0("FDRq < ", pval, ", |LFC| > ", my.lfc),
+                   treeheight_row = 0,
+                   treeheight_col = 0,
+                   color = myColor,
+                   cluster_rows = FALSE,
+                   display_numbers = round(df, digits = 0),
+                   fontsize_number = 12,
+                   number_color = "black")
+```
+
+
 ## DEG heatmap sex specific
 ```{r}
 # reformat before plotting
@@ -460,7 +608,8 @@ for (i in allComparisons) {
       coef = coef,  
       n = Inf, 
       p.value = 1,
-      lfc = 0 
+      lfc = 0,
+      confint = TRUE
     )
   #output as txt file
   path <- paste(out, model, "DEG_tables/", title, 
@@ -480,7 +629,8 @@ for (i in allComparisons) {
       coef = coef,  
       n = Inf, 
       p.value = 0.05,
-      lfc = 0.2
+      lfc = 0.2,
+      confint = TRUE
     )
   path <- paste(out, model, "DEG_tables/", title, 
                 "_FDRq_0.05_LFC_0.20.tsv", sep = "") 
@@ -501,7 +651,7 @@ for (i in allComparisons) {
 ```{r volcano_plot, message=FALSE, eval=FALSE}
 # set variables
 thresh <- 0.05
-my.lfc <- 0
+my.lfc <- 0.2
 
 # get file list
 files <- list.files(paste0(out, model,"DEG_tables/"))
@@ -622,7 +772,7 @@ for (i in files) {
 ```{r}
 # set variables
 thresh <- 0.05
-my.lfc <- 0
+my.lfc <- 0.2
 
 # get file list
 files <- list.files(paste0(out, model,"DEG_tables/"))
