@@ -1,217 +1,217 @@
-Animal #	Unique ID	Cage #	Group #	Treatment	Dose	Timepoint 	Assay
-1	Psil2_A1_High_Male	1	1	Psilocybin	1 mg / kg	8 hour	bulk + sn
-2	Psil2_A2_High_Male	1	1	Psilocybin	1 mg / kg	8 hour	bulk + sn
-3	Psil2_A3_High_Male	1	1	Psilocybin	1 mg / kg	8 hour	bulk + fixed
-4	Psil2_A4_High_Male	1	1	Psilocybin	1 mg / kg	8 hour	bulk + fixed
-5	Psil2_A5_High_Male	1	1	Psilocybin	1 mg / kg	8 hour	bulk + fixed
-6	Psil2_A6_High_Male	2	1	Psilocybin	1 mg / kg	8 hour	bulk + fixed
-7	Psil2_A7_High_Female	3	1	Psilocybin	1 mg / kg	8 hour	bulk + fixed
-8	Psil2_A8_High_Female	3	1	Psilocybin	1 mg / kg	8 hour	bulk + fixed
-9	Psil2_A9_High_Female	3	1	Psilocybin	1 mg / kg	8 hour	bulk + fixed
-10	Psil2_A10_High_Female	3	1	Psilocybin	1 mg / kg	8 hour	bulk + fixed
-11	Psil2_A11_High_Female	4	1	Psilocybin	1 mg / kg	8 hour	bulk + sn
-12	Psil2_A12_High_Female	4	1	Psilocybin	1 mg / kg	8 hour	bulk + sn
-13	Psil2_A13_Low_Male	5	4	Psilocybin	0.25 mg / kg	8 hour	bulk + sn
-14	Psil2_A14_Low_Male	5	4	Psilocybin	0.25 mg / kg	8 hour	bulk + sn
-15	Psil2_A15_Low_Male	5	4	Psilocybin	0.25 mg / kg	8 hour	bulk + fixed
-16	Psil2_A16_Low_Male	5	4	Psilocybin	0.25 mg / kg	8 hour	bulk + fixed
-17	Psil2_A17_Low_Male	5	4	Psilocybin	0.25 mg / kg	8 hour	bulk + fixed
-18	Psil2_A18_Low_Male	6	4	Psilocybin	0.25 mg / kg	8 hour	bulk + fixed
-19	Psil2_A19_Low_Female	7	4	Psilocybin	0.25 mg / kg	8 hour	bulk + fixed
-20	Psil2_A20_Low_Female	7	4	Psilocybin	0.25 mg / kg	8 hour	bulk + fixed
-21	Psil2_A21_Low_Female	7	4	Psilocybin	0.25 mg / kg	8 hour	bulk + fixed
-22	Psil2_A22_Low_Female	7	4	Psilocybin	0.25 mg / kg	8 hour	bulk + fixed
-23	Psil2_A23_Low_Female	8	4	Psilocybin	0.25 mg / kg	8 hour	bulk + sn
-24	Psil2_A24_Low_Female	8	4	Psilocybin	0.25 mg / kg	8 hour	bulk + sn
-25	Psil2_A25_NS_Male	9	7	Saline	0.9%	8 hour	bulk + sn
-26	Psil2_A26_NS_Male	9	7	Saline	0.9%	8 hour	bulk + sn
-27	Psil2_A27_NS_Male	9	7	Saline	0.9%	8 hour	bulk + fixed
-28	Psil2_A28_NS_Male	9	7	Saline	0.9%	8 hour	bulk + fixed
-29	Psil2_A29_NS_Male	9	7	Saline	0.9%	8 hour	bulk + fixed
-30	Psil2_A30_NS_Male	10	7	Saline	0.9%	8 hour	bulk + fixed
-31	Psil2_A31_NS_Female	11	7	Saline	0.9%	8 hour	bulk + fixed
-32	Psil2_A32_NS_Female	11	7	Saline	0.9%	8 hour	bulk + fixed
-33	Psil2_A33_NS_Female	11	7	Saline	0.9%	8 hour	bulk + fixed
-34	Psil2_A34_NS_Female	11	7	Saline	0.9%	8 hour	bulk + fixed
-35	Psil2_A35_NS_Female	12	7	Saline	0.9%	8 hour	bulk + sn
-36	Psil2_A36_NS_Female	12	7	Saline	0.9%	8 hour	bulk + sn
-37	Psil2_A37_K_Male	13	10	Ketanserin	2 mg / kg	8 hour	bulk + sn
-38	Psil2_A38_K_Male	13	10	Ketanserin	2 mg / kg	8 hour	bulk + sn
-39	Psil2_A39_K_Male	13	10	Ketanserin	2 mg / kg	8 hour	bulk + fixed
-40	Psil2_A40_K_Male	13	10	Ketanserin	2 mg / kg	8 hour	bulk + fixed
-41	Psil2_A41_K_Male	13	10	Ketanserin	2 mg / kg	8 hour	bulk + fixed
-42	Psil2_A42_K_Male	14	10	Ketanserin	2 mg / kg	8 hour	bulk + fixed
-43	Psil2_A43_K_Female	15	10	Ketanserin	2 mg / kg	8 hour	bulk + fixed
-44	Psil2_A44_K_Female	15	10	Ketanserin	2 mg / kg	8 hour	bulk + fixed
-45	Psil2_A45_K_Female	15	10	Ketanserin	2 mg / kg	8 hour	bulk + fixed
-46	Psil2_A46_K_Female	15	10	Ketanserin	2 mg / kg	8 hour	bulk + fixed
-47	Psil2_A47_K_Female	16	10	Ketanserin	2 mg / kg	8 hour	bulk + sn
-48	Psil2_A48_K_Female	16	10	Ketanserin	2 mg / kg	8 hour	bulk + sn
-49	Psil2_A49_K_High_Male	17	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + sn
-50	Psil2_A50_K_High_Male	17	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + sn
-51	Psil2_A51_K_High_Male	17	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + fixed
-52	Psil2_A52_K_High_Male	17	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + fixed
-53	Psil2_A53_K_High_Male	17	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + fixed
-54	Psil2_A54_K_High_Male	18	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + fixed
-55	Psil2_A55_K_High_Female	19	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + fixed
-56	Psil2_A56_K_High_Female	19	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + fixed
-57	Psil2_A57_K_High_Female	19	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + fixed
-58	Psil2_A58_K_High_Female	19	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + fixed
-59	Psil2_A59_K_High_Female	20	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + sn
-60	Psil2_A60_K_High_Female	20	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + sn
-61	Psil2_A61_K_Low_Male	21	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + sn
-62	Psil2_A62_K_Low_Male	21	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + sn
-63	Psil2_A63_K_Low_Male	21	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + fixed
-64	Psil2_A64_K_Low_Male	21	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + fixed
-65	Psil2_A65_K_Low_Male	21	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + fixed
-66	Psil2_A66_K_Low_Male	22	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + fixed
-67	Psil2_A67_K_Low_Female	23	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + fixed
-68	Psil2_A68_K_Low_Female	23	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + fixed
-69	Psil2_A69_K_Low_Female	23	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + fixed
-70	Psil2_A70_K_Low_Female	23	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + fixed
-71	Psil2_A71_K_Low_Female	24	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + sn
-72	Psil2_A72_K_Low_Female	24	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + sn
-73	Psil2_A73_High_Male	25	2	Psilocybin	1 mg / kg	24 hour	bulk + sn
-74	Psil2_A74_High_Male	25	2	Psilocybin	1 mg / kg	24 hour	bulk + sn
-75	Psil2_A75_High_Male	25	2	Psilocybin	1 mg / kg	24 hour	bulk + fixed
-76	Psil2_A76_High_Male	25	2	Psilocybin	1 mg / kg	24 hour	bulk + fixed
-77	Psil2_A77_High_Male	25	2	Psilocybin	1 mg / kg	24 hour	bulk + fixed
-78	Psil2_A78_High_Male	26	2	Psilocybin	1 mg / kg	24 hour	bulk + fixed
-79	Psil2_A79_High_Female	27	2	Psilocybin	1 mg / kg	24 hour	bulk + fixed
-80	Psil2_A80_High_Female	27	2	Psilocybin	1 mg / kg	24 hour	bulk + fixed
-81	Psil2_A81_High_Female	27	2	Psilocybin	1 mg / kg	24 hour	bulk + fixed
-82	Psil2_A82_High_Female	27	2	Psilocybin	1 mg / kg	24 hour	bulk + fixed
-83	Psil2_A83_High_Female	28	2	Psilocybin	1 mg / kg	24 hour	bulk + sn
-84	Psil2_A84_High_Female	28	2	Psilocybin	1 mg / kg	24 hour	bulk + sn
-85	Psil2_A85_Low_Male	29	5	Psilocybin	0.25 mg / kg	24 hour	bulk + sn
-86	Psil2_A86_Low_Male	29	5	Psilocybin	0.25 mg / kg	24 hour	bulk + sn
-87	Psil2_A87_Low_Male	29	5	Psilocybin	0.25 mg / kg	24 hour	bulk + fixed
-88	Psil2_A88_Low_Male	29	5	Psilocybin	0.25 mg / kg	24 hour	bulk + fixed
-89	Psil2_A89_Low_Male	29	5	Psilocybin	0.25 mg / kg	24 hour	bulk + fixed
-90	Psil2_A90_Low_Male	30	5	Psilocybin	0.25 mg / kg	24 hour	bulk + fixed
-91	Psil2_A91_Low_Female	31	5	Psilocybin	0.25 mg / kg	24 hour	bulk + fixed
-92	Psil2_A92_Low_Female	31	5	Psilocybin	0.25 mg / kg	24 hour	bulk + fixed
-93	Psil2_A93_Low_Female	31	5	Psilocybin	0.25 mg / kg	24 hour	bulk + fixed
-94	Psil2_A94_Low_Female	31	5	Psilocybin	0.25 mg / kg	24 hour	bulk + fixed
-95	Psil2_A95_Low_Female	32	5	Psilocybin	0.25 mg / kg	24 hour	bulk + sn
-96	Psil2_A96_Low_Female	32	5	Psilocybin	0.25 mg / kg	24 hour	bulk + sn
-97	Psil2_A97_NS_Male	33	8	Saline	0.9%	24 hour	bulk + sn
-98	Psil2_A98_NS_Male	33	8	Saline	0.9%	24 hour	bulk + sn
-99	Psil2_A99_NS_Male	33	8	Saline	0.9%	24 hour	bulk + fixed
-100	Psil2_A100_NS_Male	33	8	Saline	0.9%	24 hour	bulk + fixed
-101	Psil2_A101_NS_Male	33	8	Saline	0.9%	24 hour	bulk + fixed
-102	Psil2_A102_NS_Male	34	8	Saline	0.9%	24 hour	bulk + fixed
-103	Psil2_A103_NS_Female	35	8	Saline	0.9%	24 hour	bulk + fixed
-104	Psil2_A104_NS_Female	35	8	Saline	0.9%	24 hour	bulk + fixed
-105	Psil2_A105_NS_Female	35	8	Saline	0.9%	24 hour	bulk + fixed
-106	Psil2_A106_NS_Female	35	8	Saline	0.9%	24 hour	bulk + fixed
-107	Psil2_A107_NS_Female	36	8	Saline	0.9%	24 hour	bulk + sn
-108	Psil2_A108_NS_Female	36	8	Saline	0.9%	24 hour	bulk + sn
-109	Psil2_A109_K_Male	37	11	Ketanserin	2 mg / kg	24 hour	bulk + sn
-110	Psil2_A110_K_Male	37	11	Ketanserin	2 mg / kg	24 hour	bulk + sn
-111	Psil2_A111_K_Male	37	11	Ketanserin	2 mg / kg	24 hour	bulk + fixed
-112	Psil2_A112_K_Male	37	11	Ketanserin	2 mg / kg	24 hour	bulk + fixed
-113	Psil2_A113_K_Male	37	11	Ketanserin	2 mg / kg	24 hour	bulk + fixed
-114	Psil2_A114_K_Male	38	11	Ketanserin	2 mg / kg	24 hour	bulk + fixed
-115	Psil2_A115_K_Female	39	11	Ketanserin	2 mg / kg	24 hour	bulk + fixed
-116	Psil2_A116_K_Female	39	11	Ketanserin	2 mg / kg	24 hour	bulk + fixed
-117	Psil2_A117_K_Female	39	11	Ketanserin	2 mg / kg	24 hour	bulk + fixed
-118	Psil2_A118_K_Female	39	11	Ketanserin	2 mg / kg	24 hour	bulk + fixed
-119	Psil2_A119_K_Female	40	11	Ketanserin	2 mg / kg	24 hour	bulk + sn
-120	Psil2_A120_K_Female	40	11	Ketanserin	2 mg / kg	24 hour	bulk + sn
-121	Psil2_A121_K_High_Male	41	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + sn
-122	Psil2_A122_K_High_Male	41	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + sn
-123	Psil2_A123_K_High_Male	41	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + fixed
-124	Psil2_A124_K_High_Male	41	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + fixed
-125	Psil2_A125_K_High_Male	41	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + fixed
-126	Psil2_A126_K_High_Male	42	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + fixed
-127	Psil2_A127_K_High_Female	43	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + fixed
-128	Psil2_A128_K_High_Female	43	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + fixed
-129	Psil2_A129_K_High_Female	43	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + fixed
-130	Psil2_A130_K_High_Female	43	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + fixed
-131	Psil2_A131_K_High_Female	44	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + sn
-132	Psil2_A132_K_High_Female	44	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + sn
-133	Psil2_A133_K_Low_Male	45	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + sn
-134	Psil2_A134_K_Low_Male	45	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + sn
-135	Psil2_A135_K_Low_Male	45	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + fixed
-136	Psil2_A136_K_Low_Male	45	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + fixed
-137	Psil2_A137_K_Low_Male	45	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + fixed
-138	Psil2_A138_K_Low_Male	46	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + fixed
-139	Psil2_A139_K_Low_Female	47	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + fixed
-140	Psil2_A140_K_Low_Female	47	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + fixed
-141	Psil2_A141_K_Low_Female	47	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + fixed
-142	Psil2_A142_K_Low_Female	47	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + fixed
-143	Psil2_A143_K_Low_Female	48	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + sn
-144	Psil2_A144_K_Low_Female	48	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + sn
-145	Psil2_A145_High_Male	49	3	Psilocybin	1 mg / kg	7 day	bulk + sn
-146	Psil2_A146_High_Male	49	3	Psilocybin	1 mg / kg	7 day	bulk + sn
-147	Psil2_A147_High_Male	49	3	Psilocybin	1 mg / kg	7 day	bulk + fixed
-148	Psil2_A148_High_Male	49	3	Psilocybin	1 mg / kg	7 day	bulk + fixed
-149	Psil2_A149_High_Male	49	3	Psilocybin	1 mg / kg	7 day	bulk + fixed
-150	Psil2_A150_High_Male	50	3	Psilocybin	1 mg / kg	7 day	bulk + fixed
-151	Psil2_A151_High_Female	51	3	Psilocybin	1 mg / kg	7 day	bulk + fixed
-152	Psil2_A152_High_Female	51	3	Psilocybin	1 mg / kg	7 day	bulk + fixed
-153	Psil2_A153_High_Female	51	3	Psilocybin	1 mg / kg	7 day	bulk + fixed
-154	Psil2_A154_High_Female	51	3	Psilocybin	1 mg / kg	7 day	bulk + fixed
-155	Psil2_A155_High_Female	52	3	Psilocybin	1 mg / kg	7 day	bulk + sn
-156	Psil2_A156_High_Female	52	3	Psilocybin	1 mg / kg	7 day	bulk + sn
-157	Psil2_A157_Low_Male	53	6	Psilocybin	0.25 mg / kg	7 day	bulk + sn
-158	Psil2_A158_Low_Male	53	6	Psilocybin	0.25 mg / kg	7 day	bulk + sn
-159	Psil2_A159_Low_Male	53	6	Psilocybin	0.25 mg / kg	7 day	bulk + fixed
-160	Psil2_A160_Low_Male	53	6	Psilocybin	0.25 mg / kg	7 day	bulk + fixed
-161	Psil2_A161_Low_Male	53	6	Psilocybin	0.25 mg / kg	7 day	bulk + fixed
-162	Psil2_A162_Low_Male	54	6	Psilocybin	0.25 mg / kg	7 day	bulk + fixed
-163	Psil2_A163_Low_Female	55	6	Psilocybin	0.25 mg / kg	7 day	bulk + fixed
-164	Psil2_A164_Low_Female	55	6	Psilocybin	0.25 mg / kg	7 day	bulk + fixed
-165	Psil2_A165_Low_Female	55	6	Psilocybin	0.25 mg / kg	7 day	bulk + fixed
-166	Psil2_A166_Low_Female	55	6	Psilocybin	0.25 mg / kg	7 day	bulk + fixed
-167	Psil2_A167_Low_Female	56	6	Psilocybin	0.25 mg / kg	7 day	bulk + sn
-168	Psil2_A168_Low_Female	56	6	Psilocybin	0.25 mg / kg	7 day	bulk + sn
-169	Psil2_A169_NS_Male	57	9	Saline	0.9%	7 day	bulk + sn
-170	Psil2_A170_NS_Male	57	9	Saline	0.9%	7 day	bulk + sn
-171	Psil2_A171_NS_Male	57	9	Saline	0.9%	7 day	bulk + fixed
-172	Psil2_A172_NS_Male	57	9	Saline	0.9%	7 day	bulk + fixed
-173	Psil2_A173_NS_Male	57	9	Saline	0.9%	7 day	bulk + fixed
-174	Psil2_A174_NS_Male	58	9	Saline	0.9%	7 day	bulk + fixed
-175	Psil2_A175_NS_Female	59	9	Saline	0.9%	7 day	bulk + fixed
-176	Psil2_A176_NS_Female	59	9	Saline	0.9%	7 day	bulk + fixed
-177	Psil2_A177_NS_Female	59	9	Saline	0.9%	7 day	bulk + fixed
-178	Psil2_A178_NS_Female	59	9	Saline	0.9%	7 day	bulk + fixed
-179	Psil2_A179_NS_Female	60	9	Saline	0.9%	7 day	bulk + sn
-180	Psil2_A180_NS_Female	60	9	Saline	0.9%	7 day	bulk + sn
-181	Psil2_A181_K_Male	61	12	Ketanserin	2 mg / kg	7 day	bulk + sn
-182	Psil2_A182_K_Male	61	12	Ketanserin	2 mg / kg	7 day	bulk + sn
-183	Psil2_A183_K_Male	61	12	Ketanserin	2 mg / kg	7 day	bulk + fixed
-184	Psil2_A184_K_Male	61	12	Ketanserin	2 mg / kg	7 day	bulk + fixed
-185	Psil2_A185_K_Male	61	12	Ketanserin	2 mg / kg	7 day	bulk + fixed
-186	Psil2_A186_K_Male	62	12	Ketanserin	2 mg / kg	7 day	bulk + fixed
-187	Psil2_A187_K_Female	63	12	Ketanserin	2 mg / kg	7 day	bulk + fixed
-188	Psil2_A188_K_Female	63	12	Ketanserin	2 mg / kg	7 day	bulk + fixed
-189	Psil2_A189_K_Female	63	12	Ketanserin	2 mg / kg	7 day	bulk + fixed
-190	Psil2_A190_K_Female	63	12	Ketanserin	2 mg / kg	7 day	bulk + fixed
-191	Psil2_A191_K_Female	64	12	Ketanserin	2 mg / kg	7 day	bulk + sn
-192	Psil2_A192_K_Female	64	12	Ketanserin	2 mg / kg	7 day	bulk + sn
-193	Psil2_A193_K_High_Male	65	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + sn
-194	Psil2_A194_K_High_Male	65	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + sn
-195	Psil2_A195_K_High_Male	65	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + fixed
-196	Psil2_A196_K_High_Male	65	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + fixed
-197	Psil2_A197_K_High_Male	65	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + fixed
-198	Psil2_A198_K_High_Male	66	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + fixed
-199	Psil2_A199_K_High_Female	67	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + fixed
-200	Psil2_A200_K_High_Female	67	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + fixed
-201	Psil2_A201_K_High_Female	67	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + fixed
-202	Psil2_A202_K_High_Female	67	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + fixed
-203	Psil2_A203_K_High_Female	68	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + sn
-204	Psil2_A204_K_High_Female	68	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + sn
-205	Psil2_A205_K_Low_Male	69	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + sn
-206	Psil2_A206_K_Low_Male	69	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + sn
-207	Psil2_A207_K_Low_Male	69	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + fixed
-208	Psil2_A208_K_Low_Male	69	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + fixed
-209	Psil2_A209_K_Low_Male	69	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + fixed
-210	Psil2_A210_K_Low_Male	70	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + fixed
-211	Psil2_A211_K_Low_Female	71	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + fixed
-212	Psil2_A212_K_Low_Female	71	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + fixed
-213	Psil2_A213_K_Low_Female	71	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + fixed
-214	Psil2_A214_K_Low_Female	71	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + fixed
-215	Psil2_A215_K_Low_Female	72	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + sn
-216	Psil2_A216_K_Low_Female	72	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + sn
+Animal #	Unique ID	Cage #	Group #	Treatment	Dose	Timepoint 	Assay	RNA isolation	RNA batch	RIN
+1	Psil2_A1_High_Male	1	1	Psilocybin	1 mg / kg	8 hour	bulk + sn	4/27/24	A	8.7
+2	Psil2_A2_High_Male	1	1	Psilocybin	1 mg / kg	8 hour	bulk + sn	4/27/24	A	8.8
+3	Psil2_A3_High_Male	1	1	Psilocybin	1 mg / kg	8 hour	bulk + fixed	4/27/24	A	8.6
+4	Psil2_A4_High_Male	1	1	Psilocybin	1 mg / kg	8 hour	bulk + fixed	4/27/24	A	8.8
+5	Psil2_A5_High_Male	1	1	Psilocybin	1 mg / kg	8 hour	bulk + fixed	4/27/24	A	8.7
+6	Psil2_A6_High_Male	2	1	Psilocybin	1 mg / kg	8 hour	bulk + fixed	4/27/24	A	8.7
+7	Psil2_A7_High_Female	3	1	Psilocybin	1 mg / kg	8 hour	bulk + fixed	4/27/24	A	8.5
+8	Psil2_A8_High_Female	3	1	Psilocybin	1 mg / kg	8 hour	bulk + fixed	4/27/24	A	8.6
+9	Psil2_A9_High_Female	3	1	Psilocybin	1 mg / kg	8 hour	bulk + fixed	4/27/24	A	8.7
+10	Psil2_A10_High_Female	3	1	Psilocybin	1 mg / kg	8 hour	bulk + fixed	4/27/24	A	8.8
+11	Psil2_A11_High_Female	4	1	Psilocybin	1 mg / kg	8 hour	bulk + sn	4/27/24	A	8.9
+12	Psil2_A12_High_Female	4	1	Psilocybin	1 mg / kg	8 hour	bulk + sn	4/27/24	A	8.7
+13	Psil2_A13_Low_Male	5	4	Psilocybin	0.25 mg / kg	8 hour	bulk + sn	4/27/24	A	8.7
+14	Psil2_A14_Low_Male	5	4	Psilocybin	0.25 mg / kg	8 hour	bulk + sn	4/27/24	A	8.6
+15	Psil2_A15_Low_Male	5	4	Psilocybin	0.25 mg / kg	8 hour	bulk + fixed	4/27/24	A	8.5
+16	Psil2_A16_Low_Male	5	4	Psilocybin	0.25 mg / kg	8 hour	bulk + fixed	4/27/24	A	8.7
+17	Psil2_A17_Low_Male	5	4	Psilocybin	0.25 mg / kg	8 hour	bulk + fixed	4/27/24	A	8.6
+18	Psil2_A18_Low_Male	6	4	Psilocybin	0.25 mg / kg	8 hour	bulk + fixed	4/27/24	A	8.8
+19	Psil2_A19_Low_Female	7	4	Psilocybin	0.25 mg / kg	8 hour	bulk + fixed	4/27/24	A	8.7
+20	Psil2_A20_Low_Female	7	4	Psilocybin	0.25 mg / kg	8 hour	bulk + fixed	4/27/24	A	8.8
+21	Psil2_A21_Low_Female	7	4	Psilocybin	0.25 mg / kg	8 hour	bulk + fixed	4/27/24	A	8.7
+22	Psil2_A22_Low_Female	7	4	Psilocybin	0.25 mg / kg	8 hour	bulk + fixed	4/27/24	A	9
+23	Psil2_A23_Low_Female	8	4	Psilocybin	0.25 mg / kg	8 hour	bulk + sn	4/27/24	A	8.8
+24	Psil2_A24_Low_Female	8	4	Psilocybin	0.25 mg / kg	8 hour	bulk + sn	4/27/24	A	8.5
+25	Psil2_A25_NS_Male	9	7	Saline	0.9%	8 hour	bulk + sn	4/28/24	B	8.8
+26	Psil2_A26_NS_Male	9	7	Saline	0.9%	8 hour	bulk + sn	4/28/24	B	8.7
+27	Psil2_A27_NS_Male	9	7	Saline	0.9%	8 hour	bulk + fixed	4/28/24	B	8.8
+28	Psil2_A28_NS_Male	9	7	Saline	0.9%	8 hour	bulk + fixed	4/28/24	B	8.7
+29	Psil2_A29_NS_Male	9	7	Saline	0.9%	8 hour	bulk + fixed	4/28/24	B	8.8
+30	Psil2_A30_NS_Male	10	7	Saline	0.9%	8 hour	bulk + fixed	4/28/24	B	8.8
+31	Psil2_A31_NS_Female	11	7	Saline	0.9%	8 hour	bulk + fixed	4/28/24	B	8.6
+32	Psil2_A32_NS_Female	11	7	Saline	0.9%	8 hour	bulk + fixed	4/28/24	B	8.9
+33	Psil2_A33_NS_Female	11	7	Saline	0.9%	8 hour	bulk + fixed	4/28/24	B	8.8
+34	Psil2_A34_NS_Female	11	7	Saline	0.9%	8 hour	bulk + fixed	4/28/24	B	8.7
+35	Psil2_A35_NS_Female	12	7	Saline	0.9%	8 hour	bulk + sn	4/28/24	B	8.9
+36	Psil2_A36_NS_Female	12	7	Saline	0.9%	8 hour	bulk + sn	4/28/24	B	8.7
+37	Psil2_A37_K_Male	13	10	Ketanserin	2 mg / kg	8 hour	bulk + sn	4/28/24	B	8.5
+38	Psil2_A38_K_Male	13	10	Ketanserin	2 mg / kg	8 hour	bulk + sn	4/28/24	B	8.7
+39	Psil2_A39_K_Male	13	10	Ketanserin	2 mg / kg	8 hour	bulk + fixed	4/28/24	B	8.7
+40	Psil2_A40_K_Male	13	10	Ketanserin	2 mg / kg	8 hour	bulk + fixed	4/28/24	B	8.7
+41	Psil2_A41_K_Male	13	10	Ketanserin	2 mg / kg	8 hour	bulk + fixed	4/28/24	B	8.7
+42	Psil2_A42_K_Male	14	10	Ketanserin	2 mg / kg	8 hour	bulk + fixed	4/28/24	B	8.8
+43	Psil2_A43_K_Female	15	10	Ketanserin	2 mg / kg	8 hour	bulk + fixed	4/28/24	B	8.9
+44	Psil2_A44_K_Female	15	10	Ketanserin	2 mg / kg	8 hour	bulk + fixed	4/28/24	B	8.8
+45	Psil2_A45_K_Female	15	10	Ketanserin	2 mg / kg	8 hour	bulk + fixed	4/28/24	B	8.7
+46	Psil2_A46_K_Female	15	10	Ketanserin	2 mg / kg	8 hour	bulk + fixed	4/28/24	B	8.6
+47	Psil2_A47_K_Female	16	10	Ketanserin	2 mg / kg	8 hour	bulk + sn	4/28/24	B	8.7
+48	Psil2_A48_K_Female	16	10	Ketanserin	2 mg / kg	8 hour	bulk + sn	4/28/24	B	8.7
+49	Psil2_A49_K_High_Male	17	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + sn	4/28/24	B	8.7
+50	Psil2_A50_K_High_Male	17	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + sn	4/28/24	B	8.7
+51	Psil2_A51_K_High_Male	17	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + fixed	4/28/24	B	8.6
+52	Psil2_A52_K_High_Male	17	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + fixed	4/28/24	B	8.7
+53	Psil2_A53_K_High_Male	17	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + fixed	4/28/24	B	8.8
+54	Psil2_A54_K_High_Male	18	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + fixed	4/28/24	B	8.8
+55	Psil2_A55_K_High_Female	19	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + fixed	4/29/24	C	8.7
+56	Psil2_A56_K_High_Female	19	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + fixed	4/29/24	C	8.8
+57	Psil2_A57_K_High_Female	19	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + fixed	4/29/24	C	8.8
+58	Psil2_A58_K_High_Female	19	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + fixed	4/29/24	C	8.8
+59	Psil2_A59_K_High_Female	20	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + sn	4/29/24	C	8.7
+60	Psil2_A60_K_High_Female	20	13	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	8 hour	bulk + sn	4/29/24	C	8.8
+61	Psil2_A61_K_Low_Male	21	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + sn	4/29/24	C	8.9
+62	Psil2_A62_K_Low_Male	21	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + sn	4/29/24	C	8.6
+63	Psil2_A63_K_Low_Male	21	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + fixed	4/29/24	C	8.9
+64	Psil2_A64_K_Low_Male	21	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + fixed	4/29/24	C	8.7
+65	Psil2_A65_K_Low_Male	21	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + fixed	4/29/24	C	8.4
+66	Psil2_A66_K_Low_Male	22	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + fixed	4/29/24	C	8.9
+67	Psil2_A67_K_Low_Female	23	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + fixed	4/29/24	C	8.7
+68	Psil2_A68_K_Low_Female	23	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + fixed	4/29/24	C	8.7
+69	Psil2_A69_K_Low_Female	23	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + fixed	4/29/24	C	8.5
+70	Psil2_A70_K_Low_Female	23	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + fixed	4/29/24	C	9
+71	Psil2_A71_K_Low_Female	24	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + sn	4/29/24	C	9.1
+72	Psil2_A72_K_Low_Female	24	16	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	8 hour	bulk + sn	4/29/24	C	8.8
+73	Psil2_A73_High_Male	25	2	Psilocybin	1 mg / kg	24 hour	bulk + sn	4/29/24	C	8.9
+74	Psil2_A74_High_Male	25	2	Psilocybin	1 mg / kg	24 hour	bulk + sn	4/29/24	C	8.8
+75	Psil2_A75_High_Male	25	2	Psilocybin	1 mg / kg	24 hour	bulk + fixed	4/29/24	C	8.8
+76	Psil2_A76_High_Male	25	2	Psilocybin	1 mg / kg	24 hour	bulk + fixed	4/29/24	C	8.9
+77	Psil2_A77_High_Male	25	2	Psilocybin	1 mg / kg	24 hour	bulk + fixed	4/29/24	C	8.9
+78	Psil2_A78_High_Male	26	2	Psilocybin	1 mg / kg	24 hour	bulk + fixed	4/29/24	C	8.7
+79	Psil2_A79_High_Female	27	2	Psilocybin	1 mg / kg	24 hour	bulk + fixed	4/29/24	C	8.8
+80	Psil2_A80_High_Female	27	2	Psilocybin	1 mg / kg	24 hour	bulk + fixed	4/29/24	C	8.9
+81	Psil2_A81_High_Female	27	2	Psilocybin	1 mg / kg	24 hour	bulk + fixed	4/29/24	C	8.7
+82	Psil2_A82_High_Female	27	2	Psilocybin	1 mg / kg	24 hour	bulk + fixed	4/29/24	C	8.9
+83	Psil2_A83_High_Female	28	2	Psilocybin	1 mg / kg	24 hour	bulk + sn	4/29/24	C	8.9
+84	Psil2_A84_High_Female	28	2	Psilocybin	1 mg / kg	24 hour	bulk + sn	4/29/24	C	8.8
+85	Psil2_A85_Low_Male	29	5	Psilocybin	0.25 mg / kg	24 hour	bulk + sn	4/30/24	D	8.8
+86	Psil2_A86_Low_Male	29	5	Psilocybin	0.25 mg / kg	24 hour	bulk + sn	4/30/24	D	8.4
+87	Psil2_A87_Low_Male	29	5	Psilocybin	0.25 mg / kg	24 hour	bulk + fixed	4/30/24	D	8.8
+88	Psil2_A88_Low_Male	29	5	Psilocybin	0.25 mg / kg	24 hour	bulk + fixed	4/30/24	D	8.9
+89	Psil2_A89_Low_Male	29	5	Psilocybin	0.25 mg / kg	24 hour	bulk + fixed	4/30/24	D	8.8
+90	Psil2_A90_Low_Male	30	5	Psilocybin	0.25 mg / kg	24 hour	bulk + fixed	Died	Died	Died
+91	Psil2_A91_Low_Female	31	5	Psilocybin	0.25 mg / kg	24 hour	bulk + fixed	4/30/24	D	8.8
+92	Psil2_A92_Low_Female	31	5	Psilocybin	0.25 mg / kg	24 hour	bulk + fixed	4/30/24	D	8.6
+93	Psil2_A93_Low_Female	31	5	Psilocybin	0.25 mg / kg	24 hour	bulk + fixed	4/30/24	D	8.7
+94	Psil2_A94_Low_Female	31	5	Psilocybin	0.25 mg / kg	24 hour	bulk + fixed	4/30/24	D	8.6
+95	Psil2_A95_Low_Female	32	5	Psilocybin	0.25 mg / kg	24 hour	bulk + sn	4/30/24	D	7.9
+96	Psil2_A96_Low_Female	32	5	Psilocybin	0.25 mg / kg	24 hour	bulk + sn	4/30/24	D	8.7
+97	Psil2_A97_NS_Male	33	8	Saline	0.9%	24 hour	bulk + sn	4/30/24	D	8.7
+98	Psil2_A98_NS_Male	33	8	Saline	0.9%	24 hour	bulk + sn	4/30/24	D	8.7
+99	Psil2_A99_NS_Male	33	8	Saline	0.9%	24 hour	bulk + fixed	4/30/24	D	8.7
+100	Psil2_A100_NS_Male	33	8	Saline	0.9%	24 hour	bulk + fixed	4/30/24	D	8.5
+101	Psil2_A101_NS_Male	33	8	Saline	0.9%	24 hour	bulk + fixed	4/30/24	D	8.7
+102	Psil2_A102_NS_Male	34	8	Saline	0.9%	24 hour	bulk + fixed	4/30/24	D	8.8
+103	Psil2_A103_NS_Female	35	8	Saline	0.9%	24 hour	bulk + fixed	4/30/24	D	8.8
+104	Psil2_A104_NS_Female	35	8	Saline	0.9%	24 hour	bulk + fixed	4/30/24	D	8.9
+105	Psil2_A105_NS_Female	35	8	Saline	0.9%	24 hour	bulk + fixed	4/30/24	D	8.8
+106	Psil2_A106_NS_Female	35	8	Saline	0.9%	24 hour	bulk + fixed	4/30/24	D	8.9
+107	Psil2_A107_NS_Female	36	8	Saline	0.9%	24 hour	bulk + sn	4/30/24	D	8.8
+108	Psil2_A108_NS_Female	36	8	Saline	0.9%	24 hour	bulk + sn	4/30/24	D	8.9
+109	Psil2_A109_K_Male	37	11	Ketanserin	2 mg / kg	24 hour	bulk + sn	4/30/24	D	8.8
+110	Psil2_A110_K_Male	37	11	Ketanserin	2 mg / kg	24 hour	bulk + sn	4/30/24	D	8.8
+111	Psil2_A111_K_Male	37	11	Ketanserin	2 mg / kg	24 hour	bulk + fixed	4/30/24	D	8.8
+112	Psil2_A112_K_Male	37	11	Ketanserin	2 mg / kg	24 hour	bulk + fixed	4/30/24	D	8.6
+113	Psil2_A113_K_Male	37	11	Ketanserin	2 mg / kg	24 hour	bulk + fixed	4/30/24	D	8.8
+114	Psil2_A114_K_Male	38	11	Ketanserin	2 mg / kg	24 hour	bulk + fixed	4/30/24	D	8.9
+115	Psil2_A115_K_Female	39	11	Ketanserin	2 mg / kg	24 hour	bulk + fixed	5/1/24	E	8.7
+116	Psil2_A116_K_Female	39	11	Ketanserin	2 mg / kg	24 hour	bulk + fixed	5/1/24	E	8.6
+117	Psil2_A117_K_Female	39	11	Ketanserin	2 mg / kg	24 hour	bulk + fixed	5/1/24	E	8.5
+118	Psil2_A118_K_Female	39	11	Ketanserin	2 mg / kg	24 hour	bulk + fixed	5/1/24	E	8.7
+119	Psil2_A119_K_Female	40	11	Ketanserin	2 mg / kg	24 hour	bulk + sn	5/1/24	E	8.7
+120	Psil2_A120_K_Female	40	11	Ketanserin	2 mg / kg	24 hour	bulk + sn	5/1/24	E	8.4
+121	Psil2_A121_K_High_Male	41	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + sn	5/1/24	E	8.5
+122	Psil2_A122_K_High_Male	41	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + sn	5/1/24	E	8.6
+123	Psil2_A123_K_High_Male	41	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + fixed	5/1/24	E	8.6
+124	Psil2_A124_K_High_Male	41	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + fixed	5/1/24	E	8.4
+125	Psil2_A125_K_High_Male	41	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + fixed	5/1/24	E	8.8
+126	Psil2_A126_K_High_Male	42	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + fixed	5/1/24	E	8.5
+127	Psil2_A127_K_High_Female	43	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + fixed	5/1/24	E	8.6
+128	Psil2_A128_K_High_Female	43	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + fixed	5/1/24	E	8.7
+129	Psil2_A129_K_High_Female	43	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + fixed	5/1/24	E	8.5
+130	Psil2_A130_K_High_Female	43	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + fixed	5/1/24	E	8.7
+131	Psil2_A131_K_High_Female	44	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + sn	5/1/24	E	8.6
+132	Psil2_A132_K_High_Female	44	14	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	24 hour	bulk + sn	5/1/24	E	8.8
+133	Psil2_A133_K_Low_Male	45	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + sn	5/1/24	E	8.6
+134	Psil2_A134_K_Low_Male	45	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + sn	5/1/24	E	8.4
+135	Psil2_A135_K_Low_Male	45	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + fixed	5/1/24	E	8.7
+136	Psil2_A136_K_Low_Male	45	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + fixed	5/1/24	E	8.5
+137	Psil2_A137_K_Low_Male	45	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + fixed	5/1/24	E	8.8
+138	Psil2_A138_K_Low_Male	46	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + fixed	5/1/24	E	8.5
+139	Psil2_A139_K_Low_Female	47	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + fixed	5/1/24	E	8.5
+140	Psil2_A140_K_Low_Female	47	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + fixed	5/1/24	E	8.6
+141	Psil2_A141_K_Low_Female	47	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + fixed	5/1/24	E	8.7
+142	Psil2_A142_K_Low_Female	47	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + fixed	5/1/24	E	8.7
+143	Psil2_A143_K_Low_Female	48	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + sn	5/1/24	E	8.5
+144	Psil2_A144_K_Low_Female	48	17	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	24 hour	bulk + sn	5/1/24	E	8.6
+145	Psil2_A145_High_Male	49	3	Psilocybin	1 mg / kg	7 day	bulk + sn	5/2/24	F	8.8
+146	Psil2_A146_High_Male	49	3	Psilocybin	1 mg / kg	7 day	bulk + sn	5/2/24	F	8.5
+147	Psil2_A147_High_Male	49	3	Psilocybin	1 mg / kg	7 day	bulk + fixed	5/2/24	F	8.9
+148	Psil2_A148_High_Male	49	3	Psilocybin	1 mg / kg	7 day	bulk + fixed	5/2/24	F	8.7
+149	Psil2_A149_High_Male	49	3	Psilocybin	1 mg / kg	7 day	bulk + fixed	5/2/24	F	8.8
+150	Psil2_A150_High_Male	50	3	Psilocybin	1 mg / kg	7 day	bulk + fixed	5/2/24	F	8.8
+151	Psil2_A151_High_Female	51	3	Psilocybin	1 mg / kg	7 day	bulk + fixed	5/2/24	F	8.6
+152	Psil2_A152_High_Female	51	3	Psilocybin	1 mg / kg	7 day	bulk + fixed	5/2/24	F	8.3
+153	Psil2_A153_High_Female	51	3	Psilocybin	1 mg / kg	7 day	bulk + fixed	5/2/24	F	8.7
+154	Psil2_A154_High_Female	51	3	Psilocybin	1 mg / kg	7 day	bulk + fixed	5/2/24	F	8.7
+155	Psil2_A155_High_Female	52	3	Psilocybin	1 mg / kg	7 day	bulk + sn	5/2/24	F	8.9
+156	Psil2_A156_High_Female	52	3	Psilocybin	1 mg / kg	7 day	bulk + sn	5/2/24	F	8.7
+157	Psil2_A157_Low_Male	53	6	Psilocybin	0.25 mg / kg	7 day	bulk + sn	5/2/24	F	8.6
+158	Psil2_A158_Low_Male	53	6	Psilocybin	0.25 mg / kg	7 day	bulk + sn	5/2/24	F	8.7
+159	Psil2_A159_Low_Male	53	6	Psilocybin	0.25 mg / kg	7 day	bulk + fixed	5/2/24	F	8.8
+160	Psil2_A160_Low_Male	53	6	Psilocybin	0.25 mg / kg	7 day	bulk + fixed	5/2/24	F	8.7
+161	Psil2_A161_Low_Male	53	6	Psilocybin	0.25 mg / kg	7 day	bulk + fixed	5/2/24	F	8.7
+162	Psil2_A162_Low_Male	54	6	Psilocybin	0.25 mg / kg	7 day	bulk + fixed	5/2/24	F	8.7
+163	Psil2_A163_Low_Female	55	6	Psilocybin	0.25 mg / kg	7 day	bulk + fixed	5/2/24	F	8.6
+164	Psil2_A164_Low_Female	55	6	Psilocybin	0.25 mg / kg	7 day	bulk + fixed	5/2/24	F	8.4
+165	Psil2_A165_Low_Female	55	6	Psilocybin	0.25 mg / kg	7 day	bulk + fixed	5/2/24	F	8.5
+166	Psil2_A166_Low_Female	55	6	Psilocybin	0.25 mg / kg	7 day	bulk + fixed	5/2/24	F	8.6
+167	Psil2_A167_Low_Female	56	6	Psilocybin	0.25 mg / kg	7 day	bulk + sn	5/2/24	F	8.5
+168	Psil2_A168_Low_Female	56	6	Psilocybin	0.25 mg / kg	7 day	bulk + sn	5/2/24	F	8.5
+169	Psil2_A169_NS_Male	57	9	Saline	0.9%	7 day	bulk + sn	5/2/24	F	8.6
+170	Psil2_A170_NS_Male	57	9	Saline	0.9%	7 day	bulk + sn	5/2/24	F	8.5
+171	Psil2_A171_NS_Male	57	9	Saline	0.9%	7 day	bulk + fixed	5/2/24	F	8.6
+172	Psil2_A172_NS_Male	57	9	Saline	0.9%	7 day	bulk + fixed	5/2/24	F	8.5
+173	Psil2_A173_NS_Male	57	9	Saline	0.9%	7 day	bulk + fixed	5/2/24	F	8.5
+174	Psil2_A174_NS_Male	58	9	Saline	0.9%	7 day	bulk + fixed	5/2/24	F	8.4
+175	Psil2_A175_NS_Female	59	9	Saline	0.9%	7 day	bulk + fixed	5/2/24	F	8.5
+176	Psil2_A176_NS_Female	59	9	Saline	0.9%	7 day	bulk + fixed	5/2/24	F	8.5
+177	Psil2_A177_NS_Female	59	9	Saline	0.9%	7 day	bulk + fixed	5/2/24	F	7.5
+178	Psil2_A178_NS_Female	59	9	Saline	0.9%	7 day	bulk + fixed	5/2/24	F	8.6
+179	Psil2_A179_NS_Female	60	9	Saline	0.9%	7 day	bulk + sn	5/2/24	F	8.7
+180	Psil2_A180_NS_Female	60	9	Saline	0.9%	7 day	bulk + sn	5/2/24	F	8.7
+181	Psil2_A181_K_Male	61	12	Ketanserin	2 mg / kg	7 day	bulk + sn	5/2/24	F	8.9
+182	Psil2_A182_K_Male	61	12	Ketanserin	2 mg / kg	7 day	bulk + sn	5/2/24	F	8.8
+183	Psil2_A183_K_Male	61	12	Ketanserin	2 mg / kg	7 day	bulk + fixed	5/2/24	F	8.5
+184	Psil2_A184_K_Male	61	12	Ketanserin	2 mg / kg	7 day	bulk + fixed	5/2/24	F	8.4
+185	Psil2_A185_K_Male	61	12	Ketanserin	2 mg / kg	7 day	bulk + fixed	5/2/24	F	8.7
+186	Psil2_A186_K_Male	62	12	Ketanserin	2 mg / kg	7 day	bulk + fixed	5/2/24	F	8.6
+187	Psil2_A187_K_Female	63	12	Ketanserin	2 mg / kg	7 day	bulk + fixed	5/2/24	F	8.5
+188	Psil2_A188_K_Female	63	12	Ketanserin	2 mg / kg	7 day	bulk + fixed	5/2/24	F	8.6
+189	Psil2_A189_K_Female	63	12	Ketanserin	2 mg / kg	7 day	bulk + fixed	5/2/24	F	8.8
+190	Psil2_A190_K_Female	63	12	Ketanserin	2 mg / kg	7 day	bulk + fixed	5/2/24	F	8.9
+191	Psil2_A191_K_Female	64	12	Ketanserin	2 mg / kg	7 day	bulk + sn	5/2/24	F	9
+192	Psil2_A192_K_Female	64	12	Ketanserin	2 mg / kg	7 day	bulk + sn	5/2/24	F	8.6
+193	Psil2_A193_K_High_Male	65	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + sn	5/2/24	F	8.7
+194	Psil2_A194_K_High_Male	65	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + sn	5/2/24	F	8.6
+195	Psil2_A195_K_High_Male	65	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + fixed	5/2/24	F	8.5
+196	Psil2_A196_K_High_Male	65	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + fixed	5/2/24	F	8.2
+197	Psil2_A197_K_High_Male	65	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + fixed	5/2/24	F	8.5
+198	Psil2_A198_K_High_Male	66	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + fixed	5/2/24	F	8.5
+199	Psil2_A199_K_High_Female	67	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + fixed	5/2/24	F	8.1
+200	Psil2_A200_K_High_Female	67	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + fixed	5/2/24	F	8.4
+201	Psil2_A201_K_High_Female	67	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + fixed	5/2/24	F	8.8
+202	Psil2_A202_K_High_Female	67	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + fixed	5/2/24	F	8.5
+203	Psil2_A203_K_High_Female	68	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + sn	5/2/24	F	8.1
+204	Psil2_A204_K_High_Female	68	15	Ketanserin + Psilocybin	K (2 mg / kg); psilo (1 mg / kg)	7 day	bulk + sn	5/2/24	F	8.6
+205	Psil2_A205_K_Low_Male	69	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + sn	5/2/24	F	8.6
+206	Psil2_A206_K_Low_Male	69	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + sn	5/2/24	F	7.7
+207	Psil2_A207_K_Low_Male	69	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + fixed	5/2/24	F	8.5
+208	Psil2_A208_K_Low_Male	69	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + fixed	5/2/24	F	8.8
+209	Psil2_A209_K_Low_Male	69	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + fixed	5/2/24	F	8.5
+210	Psil2_A210_K_Low_Male	70	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + fixed	5/2/24	F	8.9
+211	Psil2_A211_K_Low_Female	71	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + fixed	5/2/24	F	8.6
+212	Psil2_A212_K_Low_Female	71	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + fixed	5/2/24	F	8.6
+213	Psil2_A213_K_Low_Female	71	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + fixed	5/2/24	F	8.9
+214	Psil2_A214_K_Low_Female	71	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + fixed	5/2/24	F	8.8
+215	Psil2_A215_K_Low_Female	72	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + sn	5/2/24	F	8.9
+216	Psil2_A216_K_Low_Female	72	18	Ketanserin + Psilocybin	K (2 mg / kg); psilo (0.25 mg / kg)	7 day	bulk + sn	5/2/24	F	8.3

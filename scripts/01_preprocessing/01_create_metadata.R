@@ -6,8 +6,14 @@ mouse.meta <- read.delim2("../../refs/joe_metadata.tsv", sep = "\t", header = TR
 
 # rename columns
 colNames <- c("animal_id","filename","cage","group_num","treatment","dose",
-              "timepoint","assay")
+              "timepoint","assay","RNA_isolation_date","RNA_batch","RIN")
 colnames(mouse.meta) <- colNames
+
+# mouse 90 died
+mouse.meta <- mouse.meta[!mouse.meta$animal_id == 90,]
+
+# animal 210 failed library prep
+mouse.meta <- mouse.meta[!mouse.meta$animal_id == 210,]
 
 # preview
 table(mouse.meta$treatment)
@@ -24,12 +30,12 @@ mouse.meta$dose <- gsub(" ","",mouse.meta$dose)
 mouse.meta$treatment <- gsub(" ","",mouse.meta$treatment)
 
 # group
-# saline = sal
-# ketanserin = ket
-# low dose psilocybin = psilo.low
-# high dose psilocybin = psilo.high
-# low dose psilocybin + ketanserin = ket.psilo.low
-# high dose psilocybin + ketanserin = ket.psilo.high
+# saline = S
+# ketanserin = K
+# low dose psilocybin = L
+# high dose psilocybin = H
+# low dose psilocybin + ketanserin = KL
+# high dose psilocybin + ketanserin = KH
 group <- paste(mouse.meta$treatment,
                mouse.meta$dose,
                mouse.meta$timepoint,
@@ -59,7 +65,9 @@ mouse.meta$group2 <- group2
 mouse.meta$sample_name <- paste0(mouse.meta$group2, ".", mouse.meta$animal_id)
 
 # rearrange columns
-mouse.meta <- mouse.meta[,c(12,5,6,7,9,1,10,11,2,3,4,8)]
+mouse.meta <- mouse.meta |> select(sample_name, group, treatment, dose, timepoint, 
+                                   sex, animal_id, group2, cage, assay, RNA_batch, 
+                                   RIN, filename)
 
 # sort rows
 mouse.meta$group <- factor(mouse.meta$group,
@@ -67,12 +75,6 @@ mouse.meta$group <- factor(mouse.meta$group,
                                       "S.24h","K.24h","L.24h","H.24h","KL.24h","KH.24h",
                                       "S.7d","K.7d","L.7d","H.7d","KL.7d","KH.7d"))
 mouse.meta <- mouse.meta %>% ungroup() %>% arrange(group,sex)
-
-# animal 90 died
-mouse.meta <- mouse.meta[!mouse.meta$animal_id == 90,]
-
-# Joe's group_num column is the same as my group/group2 column
-mouse.meta$group_num <- NULL
 
 # expand assay
 mouse.meta$assay <- gsub(" ", "", mouse.meta$assay)
@@ -102,9 +104,6 @@ colnames(tgen.meta)[3] <- "filename"
 mouse.meta <- dplyr::left_join(x = mouse.meta,
                                y = tgen.meta,
                                by = "filename")
-
-# Note: animal 210 had to be re-sequenced
-mouse.meta <- mouse.meta[!mouse.meta$animal_id == 210,]
 
 # save meta
 write.table(x = mouse.meta, file = "../../refs/metadata.tsv", sep = "\t",
